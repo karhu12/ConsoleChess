@@ -1,9 +1,8 @@
 #include <iostream>
 #include <ChessBoard.hpp>
+#include <ChessPosition.hpp>
 
 int main() {
-    ChessBoard b;
-    for (int i = 0; i < ChessBoard::board_height * ChessBoard::board_width; i++) {
-        std::cout << b.at(i).typeToChar() << (i != 0 && (i + 1) % 8 == 0 ? "\n" : "");
-    }
+    std::cout << "x0 y0: " << ChessPosition::toMove(0, 0) << ", x3, y4: " << ChessPosition::toMove(3, 4) << std::endl;
+    return 0;
 }

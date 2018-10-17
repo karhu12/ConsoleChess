@@ -14,7 +14,7 @@ public:
     }
     const ChessPiece& at(int i) {
         return mBoard[i];
-    } 
+    }
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;

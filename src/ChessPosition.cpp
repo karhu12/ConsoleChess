@@ -1,0 +1,25 @@
+#include "ChessPosition.hpp"
+
+const std::string ChessPosition::moves[2][8] = {
+    { "A", "B", "C", "D", "E", "F", "G", "H" },
+    { "8", "7", "6", "5", "4", "3", "2", "1" }
+};
+
+ChessPosition::ChessPosition(int xPos, int yPos) {
+    mX = xPos;
+    mY = yPos;
+    mMove = toMove(mX, mY);
+}
+
+ChessPosition::ChessPosition(std::string pos) {
+    if (pos[0] >= 'a' && pos[0] <= 'h' || pos[0] >= 'A' && pos[0] <= 'H') {
+        if (pos[1] >= '1' && pos[1] <= '8') {
+            mMove = pos[0] + pos[1];        
+        }
+    }
+
+}
+
+std::string ChessPosition::toMove(int xPos, int yPos) {
+    return moves[0][xPos] + moves[1][yPos];
+}
