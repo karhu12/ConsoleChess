@@ -1,9 +1,38 @@
 #include "ChessBoard.hpp"
 
 ChessBoard::ChessBoard() {
-
-}
-
-ChessBoard::~ChessBoard() {
-
+    mBoard = {{
+        ChessPiece(Piece::Rook, Piece::Black), ChessPiece(Piece::Knight, Piece::Black),
+        ChessPiece(Piece::Bishop, Piece::Black), ChessPiece(Piece::Queen, Piece::Black),
+        ChessPiece(Piece::King, Piece::Black), ChessPiece(Piece::Bishop, Piece::Black),
+        ChessPiece(Piece::Knight, Piece::Black), ChessPiece(Piece::Rook, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Rook, Piece::White), ChessPiece(Piece::Knight, Piece::White),
+        ChessPiece(Piece::Bishop, Piece::White), ChessPiece(Piece::Queen, Piece::White),
+        ChessPiece(Piece::King, Piece::White), ChessPiece(Piece::Bishop, Piece::White),
+        ChessPiece(Piece::Knight, Piece::White), ChessPiece(Piece::Rook, Piece::White),
+    }};
 }

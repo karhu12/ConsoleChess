@@ -1,8 +1,9 @@
 #include <iostream>
-#include <ChessPiece.hpp>
+#include <ChessBoard.hpp>
 
 int main() {
-    ChessPiece piece(Piece::Rook, Piece::Black) ;
-
-    std::cout << "Piece type: " << piece.typeToString() << " + as int: " << piece.type() << std::endl;
+    ChessBoard b;
+    for (int i = 0; i < ChessBoard::board_height * ChessBoard::board_width; i++) {
+        std::cout << b.at(i).typeToChar() << (i != 0 && (i + 1) % 8 == 0 ? "\n" : "");
+    }
 }
