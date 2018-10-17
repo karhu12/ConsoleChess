@@ -1,5 +1,8 @@
 #include <iostream>
+#include <ChessPiece.hpp>
 
 int main() {
-    std::cout << "Hello World!" << std::endl;
+    ChessPiece piece(Piece::Rook, Piece::Black) ;
+
+    std::cout << "Piece type: " << piece.typeToString() << " + as int: " << piece.type() << std::endl;
 }
