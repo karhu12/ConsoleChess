@@ -1,5 +1,7 @@
 #pragma once
 #include <ChessPiece.hpp>
+#include <ChessPosition.hpp>
+#include <Movement.hpp>
 #include <array>
 #include <utility>
 #include <memory>
@@ -12,9 +14,16 @@ public:
     const ChessPiece& at(int x, int y) {
         return mBoard[board_height * y + x];
     }
+    const ChessPiece& at(const ChessPosition& pos) {
+        return mBoard[board_height * pos.y() + pos.x()];
+    }
     const ChessPiece& at(int i) {
         return mBoard[i];
     }
+    const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }
+    static bool isValidMove(const ChessPosition& from, const ChessPosition& to, const ChessPiece& with);
+    static bool isPosOutOfBounds(const ChessPosition& pos);
+    void movePiece(const ChessPosition& from, const ChessPosition& to);
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;

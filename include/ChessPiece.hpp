@@ -8,8 +8,8 @@ namespace Piece {
     enum Type { Tile, King, Queen, Rook, Bishop, Knight, Pawn };
     const std::string sideStrings[3] = { "None", "Black", "White" };
     enum Side { None, Black, White };
-    const std::string moveTypeStrings[4] = { "Horizontal", "Vertical", "Diagonal", "LShape" };
-    enum MoveType { Horizontal, Vertical, Diagonal, LShape };
+    const std::string moveTypeStrings[5] = { "Invalid", "Horizontal", "Vertical", "Diagonal", "LShape" };
+    enum MoveType { Invalid, Horizontal, Vertical, Diagonal, LShape };
 }
 
 
@@ -17,18 +17,24 @@ class ChessPiece {
 public:
     ChessPiece() {}
     ChessPiece(Piece::Type type, Piece::Side side);
+
     std::string typeToString() const {
         return Piece::typeStrings[static_cast<int>(mPieceType)];
     }
+    
     char typeToChar() const {
         return Piece::typeStrings[static_cast<int>(mPieceType)][0];
     }
+
     int type() const { return static_cast<int>(mPieceType); }
     std::string sideToString() const {
         return Piece::sideStrings[static_cast<int>(mPieceSide)];
     }
+
     int side() const { return mPieceSide; }
+
     const std::vector<Piece::MoveType>& moves() const { return mMoves; }
+
     std::vector<std::string> movesToStrings() const {
         std::vector<std::string> movesAsStrings;
         for (auto it : mMoves) {
@@ -36,6 +42,9 @@ public:
         }
         return movesAsStrings;
     }
+
+    static std::string moveTypeToString(Piece::MoveType move) { return Piece::moveTypeStrings[move]; }
+
     int moveAmount() const { return mMoveAmount; }
     
 private:
