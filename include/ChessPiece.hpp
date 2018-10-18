@@ -8,7 +8,10 @@ namespace Piece {
     enum Type { Tile, King, Queen, Rook, Bishop, Knight, Pawn };
     const std::string sideStrings[3] = { "None", "Black", "White" };
     enum Side { None, Black, White };
+    const std::string moveTypeStrings[4] = { "Horizontal", "Vertical", "Diagonal", "LShape" };
+    enum MoveType { Horizontal, Vertical, Diagonal, LShape };
 }
+
 
 class ChessPiece {
 public:
@@ -25,15 +28,19 @@ public:
         return Piece::sideStrings[static_cast<int>(mPieceSide)];
     }
     int side() const { return mPieceSide; }
+    const std::vector<Piece::MoveType>& moves() const { return mMoves; }
+    std::vector<std::string> movesToStrings() const {
+        std::vector<std::string> movesAsStrings;
+        for (auto it : mMoves) {
+            movesAsStrings.push_back(Piece::moveTypeStrings[it]);
+        }
+        return movesAsStrings;
+    }
+    int moveAmount() const { return mMoveAmount; }
     
 private:
     Piece::Type mPieceType;
     Piece::Side mPieceSide;
-    struct Moves {
-        bool horizontal = false;
-        bool vertical = false;
-        bool diagonal = false;
-        bool LShape = false; 
-    } mMoves;
+    std::vector<Piece::MoveType> mMoves;
     int mMoveAmount;
 };
