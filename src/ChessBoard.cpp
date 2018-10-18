@@ -83,5 +83,6 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to,
 }
 
 void ChessBoard::movePiece(const ChessPosition& from, const ChessPosition& to) {
-    
+    this->mBoard[ChessBoard::indexAt(to)] = this->at(from);
+    this->mBoard[ChessBoard::indexAt(from)] = ChessPiece(Piece::Type::Tile, Piece::Side::None);
 }
