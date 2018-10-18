@@ -36,6 +36,8 @@ public:
     const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }
 
     static bool isValidMove(const ChessPosition& from, const ChessPosition& to, const ChessPiece& with);
+    
+    static bool isValidPos(int x, int y);
 
     static bool isPosOutOfBounds(const ChessPosition& pos);
 

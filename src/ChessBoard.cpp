@@ -86,3 +86,10 @@ void ChessBoard::movePiece(const ChessPosition& from, const ChessPosition& to) {
     this->mBoard[ChessBoard::indexAt(to)] = this->at(from);
     this->mBoard[ChessBoard::indexAt(from)] = ChessPiece(Piece::Type::Tile, Piece::Side::None);
 }
+
+bool ChessBoard::isValidPos(int x, int y) {
+    if ( (x >= 0 && x < board_width) && (y >= 0 && y < board_height)) {
+        return true;
+    } 
+    return false;
+}
