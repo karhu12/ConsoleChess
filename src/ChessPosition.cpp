@@ -17,7 +17,7 @@ ChessPosition::ChessPosition(int xPos, int yPos) {
 ChessPosition::ChessPosition(std::string pos) {
     mX = 0; mY = 0; mMove = "A8";
     if (isValidPos(pos)) {
-        mMove = pos[0] + pos[1];
+        mMove = pos;
         //get x and y position based of the string position
         for (int i = 0; i < 8; i++) {
             if (ChessPosition::moves[0][i].at(0) == pos[0]) {

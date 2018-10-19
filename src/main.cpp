@@ -1,8 +1,8 @@
-#include <iostream>
-#include <ChessBoard.hpp>
-#include <ChessPosition.hpp>
+#include <ChessGame.hpp>
 
 int main() {
-    
+    ChessGame game;
+
+
     return 0;
 }

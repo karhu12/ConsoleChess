@@ -45,32 +45,40 @@ bool ChessBoard::isPosOutOfBounds(const ChessPosition& pos) {
     return true;
 }
 
-bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to, const ChessPiece& with) {
+bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to) {
+    ChessPiece pieceWith(at(from)), pieceTo(at(to));
     if (ChessBoard::isPosOutOfBounds(from) || ChessBoard::isPosOutOfBounds(to) || from == to) {
         return false;
     }
     Movement move(from, to);
-    for (auto withMove : with.moves()) {
+    for (auto withMove : pieceWith.moves()) {
         //If piece has move type that matches the movement we check if its valid
         if (withMove == move.type()) {
             switch (withMove) {
                 //Correct by default because it is checked from the move list in movement class
                 case Piece::MoveType::LShape:
+                    if (pieceWith.side() == pieceTo.side()) {
+                        return false;
+                    }
                     return true;
                 case Piece::MoveType::Diagonal:
                     //each direction is powered by two in squareroot to produce positive numbers which are then summed
                     //and divided by two which gives the total movement to diagonal direction
-                    if ((sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2 <= with.moveAmount()) {
+                    int diagonalMovement = (sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2;
+                    if (diagonalMovement <= pieceWith.moveAmount()) {
+                        if (diagonalMovement > 1) {
+
+                        }
                         return true;
                     }
                     return false;
                 case Piece::MoveType::Horizontal:
-                    if (move.x() <= with.moveAmount()) {
+                    if (move.x() <= pieceWith.moveAmount()) {
                         return true;
                     }
                     return false;
                 case Piece::MoveType::Vertical:
-                    if (move.y() <= with.moveAmount()) {
+                    if (move.y() <= pieceWith.moveAmount()) {
                         return true;
                     }
                     return false;
@@ -92,4 +100,18 @@ bool ChessBoard::isValidPos(int x, int y) {
         return true;
     } 
     return false;
+}
+
+
+bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType) {
+    switch (moveType) {
+        case Piece::MoveType::Diagonal:
+            break;
+        case Piece::MoveType::Horizontal:
+            break; 
+        case Piece::MoveType::Vertical:
+            break;
+        default:
+            return false;
+    }
 }
