@@ -46,6 +46,8 @@ public:
     static std::string moveTypeToString(Piece::MoveType move) { return Piece::moveTypeStrings[move]; }
 
     int moveAmount() const { return mMoveAmount; }
+
+    void setMoveAmount(int amount) { mMoveAmount = amount; }
     
 private:
     Piece::Type mPieceType;

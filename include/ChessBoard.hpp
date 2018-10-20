@@ -13,15 +13,15 @@ public:
     static constexpr int board_width = 8;
     static constexpr int board_height = 8;
     
-    const ChessPiece& at(int x, int y) const {
+    ChessPiece& at(int x, int y) {
         return mBoard[board_height * y + x];
     }
 
-    const ChessPiece& at(const ChessPosition& pos) const {
+    ChessPiece& at(const ChessPosition& pos) {
         return mBoard[board_height * pos.y() + pos.x()];
     }
 
-    const ChessPiece& at(int i) const {
+    ChessPiece& at(int i) {
         return mBoard[i];
     }
 
@@ -43,7 +43,7 @@ public:
 
     void movePiece(const ChessPosition& from, const ChessPosition& to);
     
-    bool checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType); 
+    bool checkCollision(const ChessPosition& from, const ChessPosition& to); 
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;

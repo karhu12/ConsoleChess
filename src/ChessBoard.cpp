@@ -3,41 +3,42 @@
 //Initializes the array with all chesspieces in their starting places
 ChessBoard::ChessBoard() {
     mBoard = {{
-        ChessPiece(Piece::Rook, Piece::Black), ChessPiece(Piece::Knight, Piece::Black),
-        ChessPiece(Piece::Bishop, Piece::Black), ChessPiece(Piece::Queen, Piece::Black),
-        ChessPiece(Piece::King, Piece::Black), ChessPiece(Piece::Bishop, Piece::Black),
-        ChessPiece(Piece::Knight, Piece::Black), ChessPiece(Piece::Rook, Piece::Black),
-        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
-        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
-        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
-        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
-        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
-        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
-        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
-        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
         ChessPiece(Piece::Rook, Piece::White), ChessPiece(Piece::Knight, Piece::White),
         ChessPiece(Piece::Bishop, Piece::White), ChessPiece(Piece::Queen, Piece::White),
         ChessPiece(Piece::King, Piece::White), ChessPiece(Piece::Bishop, Piece::White),
         ChessPiece(Piece::Knight, Piece::White), ChessPiece(Piece::Rook, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Pawn, Piece::White), ChessPiece(Piece::Pawn, Piece::White),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Tile, Piece::None), ChessPiece(Piece::Tile, Piece::None),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Pawn, Piece::Black), ChessPiece(Piece::Pawn, Piece::Black),
+        ChessPiece(Piece::Rook, Piece::Black), ChessPiece(Piece::Knight, Piece::Black),
+        ChessPiece(Piece::Bishop, Piece::Black), ChessPiece(Piece::Queen, Piece::Black),
+        ChessPiece(Piece::King, Piece::Black), ChessPiece(Piece::Bishop, Piece::Black),
+        ChessPiece(Piece::Knight, Piece::Black), ChessPiece(Piece::Rook, Piece::Black),
     }};
 }
 
+//Validates position is inside the board
 bool ChessBoard::isPosOutOfBounds(const ChessPosition& pos) {
     if ( (pos.x() >= 0 && pos.x() < ChessBoard::board_width) && (pos.y() >= 0 && pos.y() < ChessBoard::board_height) ) {
         return false;
@@ -45,6 +46,8 @@ bool ChessBoard::isPosOutOfBounds(const ChessPosition& pos) {
     return true;
 }
 
+//Function validates if moving a piece to a neutral tile position is valid
+//Function also checks if there is collision between the movement
 bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to) {
     ChessPiece pieceWith(at(from)), pieceTo(at(to));
     if (ChessBoard::isPosOutOfBounds(from) || ChessBoard::isPosOutOfBounds(to) || from == to) {
@@ -57,7 +60,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
             switch (withMove) {
                 //Correct by default because it is checked from the move list in movement class
                 case Piece::MoveType::LShape:
-                    if (pieceWith.side() == pieceTo.side()) {
+                    if (checkCollision(from, to)) {
                         return false;
                     }
                     return true;
@@ -65,19 +68,25 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
                     //each direction is powered by two in squareroot to produce positive numbers which are then summed
                     //and divided by two which gives the total movement to diagonal direction
                     if ((sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2 <= pieceWith.moveAmount()) {
-                        if (checkCollision(from, to, move.type())) {
-
+                        if (checkCollision(from, to)) {
+                            return false;
                         }
                         return true;
                     }
                     return false;
                 case Piece::MoveType::Horizontal:
                     if (move.x() <= pieceWith.moveAmount()) {
+                        if (checkCollision(from, to)) {
+                            return false;
+                        }
                         return true;
                     }
                     return false;
                 case Piece::MoveType::Vertical:
                     if (move.y() <= pieceWith.moveAmount()) {
+                        if (checkCollision(from, to)) {
+                            return false;
+                        }
                         return true;
                     }
                     return false;
@@ -89,11 +98,19 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
     return false;
 }
 
+//Replaces piece at "to" position with "from" and creates new tile at "from" position
 void ChessBoard::movePiece(const ChessPosition& from, const ChessPosition& to) {
-    this->mBoard[ChessBoard::indexAt(to)] = this->at(from);
-    this->mBoard[ChessBoard::indexAt(from)] = ChessPiece(Piece::Type::Tile, Piece::Side::None);
+    mBoard[ChessBoard::indexAt(to)] = at(from);
+    mBoard[ChessBoard::indexAt(from)] = ChessPiece(Piece::Type::Tile, Piece::Side::None);
+    //If it is pawns first movement its speed will be reduced to one tile per movement after the move
+    if (at(to).type() == Piece::Type::Pawn) {
+        if (at(to).moveAmount() == 2) {
+            at(to).setMoveAmount(1);
+        }
+    }
 }
 
+//Validates x,y position on board
 bool ChessBoard::isValidPos(int x, int y) {
     if ( (x >= 0 && x < board_width) && (y >= 0 && y < board_height)) {
         return true;
@@ -103,14 +120,14 @@ bool ChessBoard::isValidPos(int x, int y) {
 
 //Function checks collision from movement on board based on the move type
 //Currently function assumes the move is correct so that is not checked
-bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType) {
+bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to) {
     Movement move(from, to);
     //Cant move to where you started
     if (from == to)
         return true;
 
     int tempX = from.x(), tempY = from.y();
-    switch (moveType) {
+    switch (move.type()) {
         case Piece::MoveType::LShape:
             if (at(to).side() != Piece::Side::None)
                 return true;

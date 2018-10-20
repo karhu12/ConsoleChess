@@ -1,4 +1,5 @@
 #include "ChessPosition.hpp"
+#include <ChessBoard.hpp>
 
 const std::string ChessPosition::moves[2][8] = {
     { "A", "B", "C", "D", "E", "F", "G", "H" },

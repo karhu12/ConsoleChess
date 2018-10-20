@@ -1,15 +1,9 @@
 #include <ChessGame.hpp>
 
 int main() {
-    
-    ChessBoard b;
-    b.movePiece(ChessPosition("D7"), ChessPosition("D6"));
-    ChessPosition from("D8");
-    ChessPosition to("D6");
-    Movement move(from, to);
-    std::cout << std::boolalpha;
-    std::cout << b.at(from).typeToString() << " at " << from.move() << " to " << to.move() << " where " << b.at(to).typeToString() << ", Collision: " << b.checkCollision(from, to, move.type()) << std::endl;
+    ChessGame game("A8 A7 A7 A5 B7 B5 A2 A4 B7 B5 B2 B4");
 
+    game.draw();
 
     return 0;
 }
