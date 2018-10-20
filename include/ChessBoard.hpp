@@ -42,8 +42,9 @@ public:
     static bool isPosOutOfBounds(const ChessPosition& pos);
 
     void movePiece(const ChessPosition& from, const ChessPosition& to);
+    
+    bool checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType); 
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;
-    bool checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType); 
 };

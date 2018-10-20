@@ -64,9 +64,8 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
                 case Piece::MoveType::Diagonal:
                     //each direction is powered by two in squareroot to produce positive numbers which are then summed
                     //and divided by two which gives the total movement to diagonal direction
-                    int diagonalMovement = (sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2;
-                    if (diagonalMovement <= pieceWith.moveAmount()) {
-                        if (diagonalMovement > 1) {
+                    if ((sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2 <= pieceWith.moveAmount()) {
+                        if (checkCollision(from, to, move.type())) {
 
                         }
                         return true;
@@ -102,16 +101,52 @@ bool ChessBoard::isValidPos(int x, int y) {
     return false;
 }
 
-
 bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType) {
+    Movement move(from, to);
+    //int diagonalMovement = (sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2;
+    //if (diagonalMovement > 1) {
+    int tempX = from.x(), tempY = from.y();
     switch (moveType) {
-        case Piece::MoveType::Diagonal:
-            break;
-        case Piece::MoveType::Horizontal:
-            break; 
-        case Piece::MoveType::Vertical:
-            break;
-        default:
+        case Piece::MoveType::LShape:
+            if (at(to).side() != Piece::Side::None)
+                return true;
             return false;
+        case Piece::MoveType::Diagonal:
+            //Check if the diagonal movement is towards negative x and positive y
+            if (move.x() > 0 && move.y() < 0) {
+                for (tempX++, tempY--; tempX <= to.x() && tempY >= to.y(); tempX++, tempY--) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+                return false;
+            }
+            else if (move.x() > 0 && move.y() > 0) {
+                for (tempX++, tempY++; tempX <= to.x() && tempY <= to.y(); tempX++, tempY++) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+                return false;
+            }
+            else if (move.x() < 0 && move.y() > 0) {
+                for (tempX--, tempY++; tempX >= to.x() && tempY <= to.y(); tempX--, tempY++) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+                return false;
+            }
+            else if (move.x() < 0 && move.y() < 0) {
+                for (tempX--, tempY--; tempX >= to.x() && tempY >= to.y(); tempX--, tempY--) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+                return false;
+            }
+            return true;
+        case Piece::MoveType::Horizontal:
+            return false;
+        case Piece::MoveType::Vertical:
+            return false;
+        default:
+            return true;
     }
 }

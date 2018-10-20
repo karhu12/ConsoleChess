@@ -19,7 +19,7 @@ std::vector<std::pair<ChessPosition, ChessPosition>> ChessGame::parseStringToMov
 void ChessGame::move(const std::string& from, const std::string& to) {
     if (ChessPosition::isValidPos(from) && ChessPosition::isValidPos(to)) {
         ChessPosition posFrom(from), posTo(to);
-        if (mBoard->isValidMove(posFrom, posTo, mBoard->at(posFrom))) {
+        if (mBoard->isValidMove(posFrom, posTo)) {
             mBoard->movePiece(from, to);
             mMoveList.push_back(std::make_pair(posFrom, posTo));
         }
