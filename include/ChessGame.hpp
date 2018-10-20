@@ -5,6 +5,7 @@
 #include <vector>
 #include <iterator>
 #include <sstream>
+#include <memory>
 
 
 class ChessGame {
@@ -13,7 +14,9 @@ public:
     ChessGame(std::string moveList);
 
     void action(const std::string& from, const std::string& to);
+
     void move(const std::string& from, const std::string& to);
+    
     void eat(const std::string& from, const std::string& to);
 
     void draw() {
@@ -29,12 +32,12 @@ public:
 
 
 private:
-    ChessBoard *mBoard;
+    std::unique_ptr<ChessBoard> mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;
     std::string mPlayerOne, mPlayerTwo;
     std::string mPlayerTurn;
 
     void rotateTurn();
 
-    bool isPlayerAllowedMove(const ChessPosition& from);
+    bool isPlayerTurn(const ChessPosition& from);
 };
