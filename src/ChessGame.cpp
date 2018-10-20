@@ -27,12 +27,10 @@ ChessGame::ChessGame(std::string moveList) {
 void ChessGame::move(const std::string& from, const std::string& to) {
     if (ChessPosition::isValidPos(from) && ChessPosition::isValidPos(to)) {
         ChessPosition posFrom(from), posTo(to);
-        if (isPlayerTurn(posFrom)) {
-            if (mBoard->isValidMove(posFrom, posTo)) {
-                mBoard->movePiece(from, to);
-                mMoveList.push_back(std::make_pair(posFrom, posTo));
-                rotateTurn();
-            }
+        if (mBoard->isValidMove(posFrom, posTo)) {
+            mBoard->movePiece(from, to);
+            mMoveList.push_back(std::make_pair(posFrom, posTo));
+            rotateTurn();
         }
     }
 }
@@ -44,7 +42,7 @@ bool ChessGame::isPlayerTurn(const ChessPosition& from) {
             return true;
         }
     }
-    if (mBoard->at(from).side() == Piece::Side::Black) {
+    else if (mBoard->at(from).side() == Piece::Side::Black) {
         return true;
     }
     return false;
@@ -74,11 +72,22 @@ void ChessGame::action(const std::string& from, const std::string& to) {
         }
         else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
             std::cout << "Eat" << std::endl;
-            //eat
+            eat(from, to);
         }
     }
     else {
         std::cout << "Not players turn" << std::endl;
     }
     //Prompt incorrect turn?
+}
+
+void ChessGame::eat(const std::string& from, const std::string& to) {
+    if (ChessPosition::isValidPos(from) && ChessPosition::isValidPos(to)) {
+        ChessPosition posFrom(from), posTo(to);
+        if (mBoard->isValidEat(posFrom, posTo)) {
+            mBoard->movePiece(from, to);
+            mMoveList.push_back(std::make_pair(posFrom, posTo));
+            rotateTurn();
+        }
+    }
 }

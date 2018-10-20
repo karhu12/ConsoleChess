@@ -15,7 +15,7 @@ ChessPosition::ChessPosition(int xPos, int yPos) {
     }
 }
 
-ChessPosition::ChessPosition(std::string pos) {
+ChessPosition::ChessPosition(const std::string& pos) {
     mX = 0; mY = 0; mMove = "A8";
     if (isValidPos(pos)) {
         mMove = pos;

@@ -4,7 +4,7 @@
 class ChessPosition {
 public:
     ChessPosition(int xPos, int yPos);
-    ChessPosition(std::string pos);
+    ChessPosition(const std::string& pos);
 
     static std::string toMove(int xPos, int yPos);
 
