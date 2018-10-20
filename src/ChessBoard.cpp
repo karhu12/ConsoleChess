@@ -101,10 +101,14 @@ bool ChessBoard::isValidPos(int x, int y) {
     return false;
 }
 
+//Function checks collision from movement on board based on the move type
+//Currently function assumes the move is correct so that is not checked
 bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, Piece::MoveType moveType) {
     Movement move(from, to);
-    //int diagonalMovement = (sqrt(pow(move.x(),2)) + sqrt(pow(move.y(),2))) / 2;
-    //if (diagonalMovement > 1) {
+    //Cant move to where you started
+    if (from == to)
+        return true;
+
     int tempX = from.x(), tempY = from.y();
     switch (moveType) {
         case Piece::MoveType::LShape:
@@ -112,7 +116,7 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
                 return true;
             return false;
         case Piece::MoveType::Diagonal:
-            //Check if the diagonal movement is towards negative x and positive y
+            //Check if the diagonal movement is towards positive x and negative y
             if (move.x() > 0 && move.y() < 0) {
                 for (tempX++, tempY--; tempX <= to.x() && tempY >= to.y(); tempX++, tempY--) {
                     if (at(tempX, tempY).side() != Piece::Side::None)
@@ -120,6 +124,7 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
                 }
                 return false;
             }
+            //Check if the diagonal movement is towards positive x and positive y
             else if (move.x() > 0 && move.y() > 0) {
                 for (tempX++, tempY++; tempX <= to.x() && tempY <= to.y(); tempX++, tempY++) {
                     if (at(tempX, tempY).side() != Piece::Side::None)
@@ -127,6 +132,7 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
                 }
                 return false;
             }
+            //Check if the diagonal movement is towards negative x and positive y
             else if (move.x() < 0 && move.y() > 0) {
                 for (tempX--, tempY++; tempX >= to.x() && tempY <= to.y(); tempX--, tempY++) {
                     if (at(tempX, tempY).side() != Piece::Side::None)
@@ -134,6 +140,7 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
                 }
                 return false;
             }
+            //Check if the diagonal movement is towards negative x and negative y
             else if (move.x() < 0 && move.y() < 0) {
                 for (tempX--, tempY--; tempX >= to.x() && tempY >= to.y(); tempX--, tempY--) {
                     if (at(tempX, tempY).side() != Piece::Side::None)
@@ -143,8 +150,36 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
             }
             return true;
         case Piece::MoveType::Horizontal:
+            //Check if the horizontal movement is towards positive x
+            if (move.x() > 0) {
+                for (tempX++; tempX <= to.x(); tempX++) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+            }
+            //Check if the horizontal movement is towards negative x
+            else if (move.x() < 0) {
+                for (tempX--; tempX >= to.x(); tempX--) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+            }
             return false;
         case Piece::MoveType::Vertical:
+            //Check if the vertical movement is towards positive y
+            if (move.y() > 0) {
+                for (tempY++; tempY <= to.y(); tempY++) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+            }
+            //Check if the vertical movement is towards negative y
+            else if (move.y() < 0) {
+                for (tempY--; tempY >= to.y(); tempY--) {
+                    if (at(tempX, tempY).side() != Piece::Side::None)
+                        return true;
+                }
+            }
             return false;
         default:
             return true;
