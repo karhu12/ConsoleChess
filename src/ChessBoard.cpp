@@ -268,3 +268,55 @@ bool ChessBoard::isValidEat(const ChessPosition& from, const ChessPosition& to) 
     }
     return false;
 }
+
+
+std::vector<ChessPosition> ChessBoard::piecePositions(Piece::Type type, Piece::Side side) {
+    std::vector<ChessPosition> pieces;
+    for (int i = 0; i < board_height * board_width; i++) {
+        if (at(i).type() == type && at(i).side() == side) {
+            pieces.push_back(ChessPosition(i));
+        }
+    }
+    return pieces;
+}
+
+std::vector<ChessPosition> ChessBoard::piecePositions(Piece::Side side) {
+    std::vector<ChessPosition> pieces;
+    for (int i = 0; i < board_height * board_width; i++) {
+        if (at(i).side() == side) {
+            pieces.push_back(ChessPosition(i));
+        }
+    }
+    return pieces;
+}
+
+ChessPosition ChessBoard::firstPiecePosition(Piece::Type type, Piece::Side side) {
+    for (int i = 0; i < board_height * board_width; i++) {
+        if (at(i).type() == type && at(i).side() == side) {
+            return ChessPosition(i);
+        }
+    }
+    return ChessPosition();
+}
+
+ChessPosition ChessBoard::firstPiecePosition(Piece::Side side) {
+    std::vector<ChessPosition> pieces;
+    for (int i = 0; i < board_height * board_width; i++) {
+        if (at(i).side() == side) {
+            return ChessPosition(i);
+        }
+    }
+    return ChessPosition();
+}
+
+
+
+std::vector<ChessPosition> ChessBoard::pieceMoves(const ChessPosition& piecePos) {
+    std::vector<ChessPosition> moves;
+    for (int i = 0; i < ChessBoard::board_height*ChessBoard::board_width; i++) {
+        if (isValidMove(ChessPosition(piecePos), ChessPosition(i))) {
+            moves.push_back(ChessPosition(i));
+        }
+    }
+    return moves;
+}

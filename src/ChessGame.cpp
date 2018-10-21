@@ -1,16 +1,16 @@
 #include "ChessGame.hpp"
 
 ChessGame::ChessGame() {
-    mPlayerOne = "White";
-    mPlayerTwo = "Black";
-    mPlayerTurn = mPlayerOne;
+    mPlayerOne = Player("White");
+    mPlayerTwo = Player("Black");
+    mPlayerTurn = mPlayerOne.name();
     mBoard = std::make_unique<ChessBoard>();
 }
 
 ChessGame::ChessGame(std::string moveList) {
-    mPlayerOne = "White";
-    mPlayerTwo = "Black";
-    mPlayerTurn = mPlayerOne;
+    mPlayerOne = Player("White");
+    mPlayerTwo = Player("Black");
+    mPlayerTurn = mPlayerOne.name();
     mBoard = std::make_unique<ChessBoard>();
 
     std::istringstream ss{moveList};
@@ -37,7 +37,7 @@ void ChessGame::move(const std::string& from, const std::string& to) {
 
 
 bool ChessGame::isPlayerTurn(const ChessPosition& from) {
-    if (mPlayerTurn == mPlayerOne) {
+    if (mPlayerTurn == mPlayerOne.name()) {
         if (mBoard->at(from).side() == Piece::Side::White) {
             return true;
         }
@@ -49,30 +49,38 @@ bool ChessGame::isPlayerTurn(const ChessPosition& from) {
 }
 
 void ChessGame::rotateTurn() { 
-    if (mPlayerTurn == mPlayerOne) {
-        mPlayerTurn = mPlayerTwo;
+    if (mPlayerTurn == mPlayerOne.name()) {
+        mPlayerTurn = mPlayerTwo.name();
     }
     else {
-        mPlayerTurn = mPlayerOne;
+        mPlayerTurn = mPlayerOne.name();
     }
 }
 
 void ChessGame::action(const std::string& from, const std::string& to) {
     ChessPosition fromPos(from), toPos(to);
     if (isPlayerTurn(fromPos)) {
-        if (mBoard->at(fromPos).side() == Piece::Side::None) {
-            std::cout << "Cannot do actions to tiles" << std::endl;
+        if (isCheck()) {
+            std::cout << mPlayerOne.name() << "is in check" << std::endl;
+            if (isCheckMate()) {
+                std::cout << mPlayerTurn << "Has been checkMated" << std::endl;
+            }
         }
-        else if (mBoard->at(fromPos).side() == mBoard->at(toPos).side()) {
-            std::cout << "Cannot eat/move to your own piece" << std::endl;
-        }
-        else if (mBoard->at(toPos).side() == Piece::Side::None) {
-            std::cout << "Move" << std::endl;
-            move(from, to);
-        }
-        else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
-            std::cout << "Eat" << std::endl;
-            eat(from, to);
+        else {
+            if (mBoard->at(fromPos).side() == Piece::Side::None) {
+                std::cout << "Cannot do actions to tiles" << std::endl;
+            }
+            else if (mBoard->at(fromPos).side() == mBoard->at(toPos).side()) {
+                std::cout << "Cannot eat/move to your own piece" << std::endl;
+            }
+            else if (mBoard->at(toPos).side() == Piece::Side::None) {
+                std::cout << "Move" << std::endl;
+                move(from, to);
+            }
+            else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
+                std::cout << "Eat" << std::endl;
+                eat(from, to);
+            }
         }
     }
     else {
@@ -89,5 +97,51 @@ void ChessGame::eat(const std::string& from, const std::string& to) {
             mMoveList.push_back(std::make_pair(posFrom, posTo));
             rotateTurn();
         }
+    }
+}
+
+bool ChessGame::isCheck() {
+    if (playersTurn() == mPlayerOne.name()) {
+        ChessPosition whiteKingPos = mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::White);
+        for (auto blackPos : mBoard->piecePositions(Piece::Side::Black)) {
+            if (mBoard->isValidEat(blackPos, whiteKingPos))
+                return true;
+        }
+        return false;
+    }
+    else {
+        ChessPosition blackKingPos = mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::Black);
+        for (auto whitePos : mBoard->piecePositions(Piece::Side::White)) {
+            if (mBoard->isValidEat(whitePos, blackKingPos))
+                return true;
+        }
+        return false;
+    }
+}
+
+bool ChessGame::isCheckMate() {
+    std::vector<ChessPosition> kingMoves;
+    std::vector<ChessPosition> opponentPieces;
+    int takenMovePositions = 0;
+    //Check if check can be negetated by moving the king
+    if (playersTurn() == mPlayerOne.name()) {
+        kingMoves = mBoard->pieceMoves(mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::White));
+        opponentPieces = mBoard->piecePositions(Piece::Side::Black);
+        for (auto opponent : opponentPieces) {
+            for (auto kingMove : kingMoves) {
+                if (mBoard->isValidMove(opponent, kingMove)) {
+                    takenMovePositions++;
+                    continue;
+                }
+            }
+        }
+        //if the check can not be negetated by moving the king see if eating or moving pieces can help
+        if (static_cast<int>(kingMoves.size()) == takenMovePositions) {
+            return true;
+        }
+        return false;
+    }
+    else {
+        return true;
     }
 }

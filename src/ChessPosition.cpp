@@ -6,6 +6,15 @@ const std::string ChessPosition::moves[2][8] = {
     { "8", "7", "6", "5", "4", "3", "2", "1" }
 };
 
+ChessPosition::ChessPosition(int index) {
+    mX = 0; mY = 0; mMove = "A8";
+    if ( (index % 8 >= 0 && index % 8 < 8) && (index / 8 >= 0 && index / 8 < 8)) {
+        mX = index % 8;
+        mY = index / 8;
+        mMove = toMove(mX, mY);
+    }
+}
+
 ChessPosition::ChessPosition(int xPos, int yPos) {
     mX = 0; mY = 0; mMove = "A8";
     if ( (xPos >= 0 && xPos < 8) && (yPos >= 0 && yPos < 8)) {
@@ -42,4 +51,35 @@ bool ChessPosition::isValidPos(const std::string& pos) {
         }
     }
     return false;
+}
+
+void ChessPosition::setPos(int index) {
+    if ( (index % 8 >= 0 && index % 8 < 8) && (index / 8 >= 0 && index / 8 < 8)) {
+        mX = index % 8;
+        mY = index / 8;
+        mMove = toMove(mX, mY);
+    }
+}
+
+void ChessPosition::setPos(int xPos, int yPos) {
+    if ( (xPos >= 0 && xPos < 8) && (yPos >= 0 && yPos < 8)) {
+        mX = xPos;
+        mY = yPos;
+        mMove = toMove(mX, mY);
+    }
+}
+
+void ChessPosition::setPos(const std::string& pos) {
+    if (isValidPos(pos)) {
+        mMove = pos;
+        //get x and y position based of the string position
+        for (int i = 0; i < 8; i++) {
+            if (ChessPosition::moves[0][i].at(0) == pos[0]) {
+                mX = i;
+            }
+            if (ChessPosition::moves[1][i].at(0) == pos[1]) {
+                mY = i;
+            }
+        }  
+    }
 }

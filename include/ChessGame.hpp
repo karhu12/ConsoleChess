@@ -1,6 +1,7 @@
 #pragma once
-#include <iostream>
 #include <ChessBoard.hpp>
+#include <Player.hpp>
+#include <iostream>
 #include <utility>
 #include <vector>
 #include <iterator>
@@ -30,11 +31,14 @@ public:
 
     std::string playersTurn() const { return mPlayerTurn; }
 
+    bool isCheck();
+    bool isCheckMate();
+
 
 private:
     std::unique_ptr<ChessBoard> mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;
-    std::string mPlayerOne, mPlayerTwo;
+    Player mPlayerOne, mPlayerTwo;
     std::string mPlayerTurn;
 
     void rotateTurn();

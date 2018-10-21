@@ -47,6 +47,13 @@ public:
     
     bool checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd);
 
+    std::vector<ChessPosition> piecePositions(Piece::Type type, Piece::Side side);
+    std::vector<ChessPosition> piecePositions(Piece::Side side);
+    ChessPosition firstPiecePosition(Piece::Type type, Piece::Side side);
+    ChessPosition firstPiecePosition(Piece::Side side);
+
+    std::vector<ChessPosition> pieceMoves(const ChessPosition& piecePos);
+
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;
 };
