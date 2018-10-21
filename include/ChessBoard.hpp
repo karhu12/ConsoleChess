@@ -52,6 +52,8 @@ public:
     ChessPosition firstPiecePosition(Piece::Type type, Piece::Side side);
     ChessPosition firstPiecePosition(Piece::Side side);
 
+    std::vector<ChessPosition> movePositions(const ChessPosition& from, const ChessPosition& to);
+
     std::vector<ChessPosition> pieceMoves(const ChessPosition& piecePos);
 
 private:

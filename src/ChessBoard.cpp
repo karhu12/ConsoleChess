@@ -320,3 +320,10 @@ std::vector<ChessPosition> ChessBoard::pieceMoves(const ChessPosition& piecePos)
     }
     return moves;
 }
+
+std::vector<ChessPosition> ChessBoard::movePositions(const ChessPosition& from, const ChessPosition& to) {
+    std::vector<ChessPosition> positions;
+    
+
+    return;
+}

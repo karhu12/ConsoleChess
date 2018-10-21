@@ -121,15 +121,45 @@ bool ChessGame::isCheck() {
 
 bool ChessGame::isCheckMate() {
     std::vector<ChessPosition> kingMoves;
-    std::vector<ChessPosition> opponentPieces;
+    std::vector<ChessPosition> opponentPositions;
+    std::vector<ChessPosition> contenstedPositions;
     int takenMovePositions = 0;
     //Check if check can be negetated by moving the king
     if (playersTurn() == mPlayerOne.name()) {
         kingMoves = mBoard->pieceMoves(mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::White));
-        opponentPieces = mBoard->piecePositions(Piece::Side::Black);
-        for (auto opponent : opponentPieces) {
-            for (auto kingMove : kingMoves) {
-                if (mBoard->isValidMove(opponent, kingMove)) {
+        opponentPositions = mBoard->piecePositions(Piece::Side::Black);
+        for (auto opponent : opponentPositions) {
+            for (auto kingPosition : kingMoves) {
+                if (std::find(contenstedPositions.begin(), contenstedPositions.end(), kingPosition) == contenstedPositions.end()) {
+                    if (mBoard->isValidMove(opponent, kingPosition)) {
+                        contenstedPositions.push_back(kingPosition);
+                    }
+                }
+            }
+        }
+        //if the check can not be negetated by moving the king see if eating or moving pieces can help
+        if (kingMoves.size() == contenstedPositions.size()) {
+            std::vector<ChessPosition> allyPositions = mBoard->piecePositions(Piece::Side::White);
+            for (auto ally : allyPositions) {
+                if (mBoard->at(ally).type() != Piece::Type::King) {
+                    for (auto contestedPos : contenstedPositions) {
+                        if (mBoard->isValidMove(ally, contestedPos)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        //King can be moved to resolve Check Mate
+        return false;
+    }
+    else {
+        kingMoves = mBoard->pieceMoves(mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::Black));
+        opponentPositions = mBoard->piecePositions(Piece::Side::White);
+        for (auto opponent : opponentPositions) {
+            for (auto kingPosition : kingMoves) {
+                if (mBoard->isValidMove(opponent, kingPosition)) {
                     takenMovePositions++;
                     continue;
                 }
@@ -140,8 +170,5 @@ bool ChessGame::isCheckMate() {
             return true;
         }
         return false;
-    }
-    else {
-        return true;
     }
 }

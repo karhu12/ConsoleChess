@@ -7,6 +7,7 @@
 #include <iterator>
 #include <sstream>
 #include <memory>
+#include <algorithm>
 
 
 class ChessGame {
