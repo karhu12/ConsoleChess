@@ -126,6 +126,8 @@ bool ChessBoard::isValidPos(int x, int y) {
     return false;
 }
 
+
+//To-Do Too much if clauses in diagonal movement
 //Function checks collision from movement on board based on the move type
 //Currently function assumes the move is correct so that is not checked
 bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd) {

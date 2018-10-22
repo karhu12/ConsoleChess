@@ -164,13 +164,22 @@ bool ChessGame::isCheckMate() {
                     }
                 }
             }
-            if (contestorsMovesBlocked == static_cast<int>(contestorMoves.size())) {
-                return false;
+            //If the moves can not be contested by moving allied pieces attempt to eat the contesting pieces
+            if (contestorsMovesBlocked != static_cast<int>(contestorMoves.size())) {
+                int contestorsEaten = 0;
+                for (auto contestor : contestorMoves) {
+                    for (auto ally : allyPositions) {
+                        if (mBoard->isValidEat(ally, contestor.first)) {
+                            contestorsEaten++;
+                            break;
+                        }
+                    }
+                }
+                if (contestorsEaten == static_cast<int>(contestorMoves.size()))
+                    return false;
+                return true;
             }
-            return true;
         }
-
-
         return false;
     }
     else {
