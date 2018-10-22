@@ -122,53 +122,59 @@ bool ChessGame::isCheck() {
 bool ChessGame::isCheckMate() {
     std::vector<ChessPosition> kingMoves;
     std::vector<ChessPosition> opponentPositions;
-    std::vector<ChessPosition> contenstedPositions;
-    int takenMovePositions = 0;
+    //First position is the contestor position and second one is which position is contested
+    std::vector<std::pair<ChessPosition, ChessPosition>> contestedKingMoves; 
+    std::vector<ChessPosition> contestedPositions;
     //Check if check can be negetated by moving the king
     if (playersTurn() == mPlayerOne.name()) {
         kingMoves = mBoard->pieceMoves(mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::White));
         opponentPositions = mBoard->piecePositions(Piece::Side::Black);
         for (auto opponent : opponentPositions) {
             for (auto kingPosition : kingMoves) {
-                if (std::find(contenstedPositions.begin(), contenstedPositions.end(), kingPosition) == contenstedPositions.end()) {
-                    if (mBoard->isValidMove(opponent, kingPosition)) {
-                        contenstedPositions.push_back(kingPosition);
+                if (mBoard->isValidMove(opponent, kingPosition)) {
+                    contestedKingMoves.push_back(std::make_pair(opponent, kingPosition));
+                    if (std::find(contestedPositions.begin(), contestedPositions.end(), kingPosition) == contestedPositions.end()) {
+                        contestedPositions.push_back(kingPosition);
                     }
                 }
             }
         }
-        //if the check can not be negetated by moving the king see if eating or moving pieces can help
-        if (kingMoves.size() == contenstedPositions.size()) {
+        //if the check can not be negetated by moving the king see if blocking the route is possible
+        if (kingMoves.size() == contestedPositions.size()) {
             std::vector<ChessPosition> allyPositions = mBoard->piecePositions(Piece::Side::White);
-            for (auto ally : allyPositions) {
-                if (mBoard->at(ally).type() != Piece::Type::King) {
-                    for (auto contestedPos : contenstedPositions) {
-                        if (mBoard->isValidMove(ally, contestedPos)) {
-                            return false;
+            std::vector<std::pair<ChessPosition, std::vector<ChessPosition>>> contestorMoves;
+            for (auto contestor : contestedKingMoves) {
+                contestorMoves.push_back(std::make_pair(contestor.first, mBoard->movePositions(contestor.first, contestor.second)));
+            }
+            int contestorsMovesBlocked = 0;
+            bool blockedContestorMove = false;
+            for (auto contestor : contestorMoves) {
+                for (auto blockablePosition : contestor.second) {
+                    for (auto ally : allyPositions) {
+                        if (mBoard->at(ally).type() == Piece::Type::King) break;
+                        if (mBoard->isMoveBlockable(ally, blockablePosition)) {
+                            contestorsMovesBlocked++;
+                            blockedContestorMove = true;
+                            break;
                         }
                     }
+                    if (blockedContestorMove) {
+                        blockedContestorMove = false;
+                        break;
+                    }
                 }
+            }
+            if (contestorsMovesBlocked == static_cast<int>(contestorMoves.size())) {
+                return false;
             }
             return true;
         }
-        //King can be moved to resolve Check Mate
+
+
         return false;
     }
     else {
-        kingMoves = mBoard->pieceMoves(mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::Black));
-        opponentPositions = mBoard->piecePositions(Piece::Side::White);
-        for (auto opponent : opponentPositions) {
-            for (auto kingPosition : kingMoves) {
-                if (mBoard->isValidMove(opponent, kingPosition)) {
-                    takenMovePositions++;
-                    continue;
-                }
-            }
-        }
-        //if the check can not be negetated by moving the king see if eating or moving pieces can help
-        if (static_cast<int>(kingMoves.size()) == takenMovePositions) {
-            return true;
-        }
+        
         return false;
     }
 }

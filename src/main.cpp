@@ -1,8 +1,7 @@
 #include <ChessGame.hpp>
 
 int main() {
-    ChessGame g("D2 D3 E7 E6 G2 G3 F8 B4 E1 D2"); //ChecK
-    g.draw();
+    ChessGame g("B2 B4 A7 A5 B1 C3 A8 A6 E2 E4");
 
     return 0;
 }

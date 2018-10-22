@@ -56,6 +56,8 @@ public:
 
     std::vector<ChessPosition> pieceMoves(const ChessPosition& piecePos);
 
+    bool isMoveBlockable(const ChessPosition& from, const ChessPosition& to);
+
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;
 };
