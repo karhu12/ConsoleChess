@@ -17,13 +17,15 @@ public:
 
     void action(const std::string& from, const std::string& to);
 
-    void move(const std::string& from, const std::string& to);
+    bool move(const std::string& from, const std::string& to);
     
-    void eat(const std::string& from, const std::string& to);
+    bool eat(const std::string& from, const std::string& to);
 
     void draw() {
+        std::cout << "A B C D E F G H" << std::endl;
+        std::cout << "---------------" << std::endl;
         for (int i = 0; i < ChessBoard::board_height*ChessBoard::board_width; i++) {
-            std::cout << mBoard->at(i).typeToChar() << (i != 0 && (i + 1) % ChessBoard::board_width == 0 ? "\n" : " ");
+            std::cout << mBoard->at(i).typeToChar() << (i != 0 && (i + 1) % ChessBoard::board_width == 0 ? " | " + std::to_string(8 - (i / 8)) + "\n" : " ");
         }
         std::cout << std::endl;
     }

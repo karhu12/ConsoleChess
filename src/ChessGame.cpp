@@ -24,15 +24,28 @@ ChessGame::ChessGame(std::string moveList) {
     }
 }
 
-void ChessGame::move(const std::string& from, const std::string& to) {
+bool ChessGame::move(const std::string& from, const std::string& to) {
     if (ChessPosition::isValidPos(from) && ChessPosition::isValidPos(to)) {
         ChessPosition posFrom(from), posTo(to);
         if (mBoard->isValidMove(posFrom, posTo)) {
             mBoard->movePiece(from, to);
-            mMoveList.push_back(std::make_pair(posFrom, posTo));
-            rotateTurn();
+            if (isCheck()) {
+                mBoard->movePiece(to, from);
+            }
+            else {
+                mMoveList.push_back(std::make_pair(posFrom, posTo));
+                rotateTurn();
+                if (isCheck()) {
+                    std::cout << "Opponent Checked" << std::endl;
+                    if (isCheckMate()) {
+                        std::cout << "Opponent check mated" << std::endl;
+                    }
+                }
+                return true;
+            }
         }
     }
+    return false;
 }
 
 
@@ -60,46 +73,54 @@ void ChessGame::rotateTurn() {
 void ChessGame::action(const std::string& from, const std::string& to) {
     ChessPosition fromPos(from), toPos(to);
     if (isPlayerTurn(fromPos)) {
-        if (isCheck()) {
-            std::cout << mPlayerOne.name() << "is in check" << std::endl;
-            if (isCheckMate()) {
-                std::cout << mPlayerTurn << "Has been checkMated" << std::endl;
-            }
+        if (mBoard->at(fromPos).side() == Piece::Side::None) {
+            std::cout << "Cannot do actions to tiles" << std::endl;
         }
-        else {
-            if (mBoard->at(fromPos).side() == Piece::Side::None) {
-                std::cout << "Cannot do actions to tiles" << std::endl;
-            }
-            else if (mBoard->at(fromPos).side() == mBoard->at(toPos).side()) {
-                std::cout << "Cannot eat/move to your own piece" << std::endl;
-            }
-            else if (mBoard->at(toPos).side() == Piece::Side::None) {
-                std::cout << "Move" << std::endl;
-                move(from, to);
-            }
-            else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
-                std::cout << "Eat" << std::endl;
-                eat(from, to);
-            }
+        else if (mBoard->at(fromPos).side() == mBoard->at(toPos).side()) {
+            std::cout << "Cannot eat/move to your own piece" << std::endl;
+        }
+        else if (mBoard->at(toPos).side() == Piece::Side::None) {
+            std::cout << "Move from " << from << " To " << to << std::endl;
+            if (!move(from, to)) std::cout << "Invalid move" << std::endl;
+        }
+        else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
+            std::cout << "Eat from " << from << " To " << to << std::endl;
+            if (!eat(from, to)) std::cout << "Invalid eat" << std::endl;
         }
     }
     else {
         std::cout << "Not players turn" << std::endl;
     }
-    //Prompt incorrect turn?
 }
 
-void ChessGame::eat(const std::string& from, const std::string& to) {
+//Attempt to eat the piece from "to" position with piece at "from" position
+bool ChessGame::eat(const std::string& from, const std::string& to) {
     if (ChessPosition::isValidPos(from) && ChessPosition::isValidPos(to)) {
         ChessPosition posFrom(from), posTo(to);
         if (mBoard->isValidEat(posFrom, posTo)) {
+            ChessPiece temp = mBoard->at(to);
             mBoard->movePiece(from, to);
-            mMoveList.push_back(std::make_pair(posFrom, posTo));
-            rotateTurn();
+            if (isCheck()) {
+                mBoard->movePiece(to, from);
+                mBoard->at(to) = temp;
+            }
+            else {
+                mMoveList.push_back(std::make_pair(posFrom, posTo));
+                rotateTurn();
+                if (isCheck()) {
+                    std::cout << "Opponent Checked" << std::endl;
+                    if (isCheckMate()) {
+                        std::cout << "Opponent check mated" << std::endl;
+                    }
+                }
+                return true;
+            }
         }
     }
+    return false;
 }
 
+//Checks if the game is in check with current players turn
 bool ChessGame::isCheck() {
     if (playersTurn() == mPlayerOne.name()) {
         ChessPosition whiteKingPos = mBoard->firstPiecePosition(Piece::Type::King, Piece::Side::White);
@@ -119,6 +140,7 @@ bool ChessGame::isCheck() {
     }
 }
 
+//Checks if the game is in check mate with current players turn
 bool ChessGame::isCheckMate() {
     std::vector<ChessPosition> kingMoves;
     std::vector<ChessPosition> opponentPositions;
