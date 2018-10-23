@@ -1,6 +1,8 @@
 #include "ChessGame.hpp"
 
 ChessGame::ChessGame() {
+    mGameStatus = true;
+    mTurn = 0;
     mWhitePlayer = Player("White", Piece::Side::White);
     mBlackPlayer = Player("Black", Piece::Side::Black);
     mPlayerTurn = mWhitePlayer.side();
@@ -8,6 +10,8 @@ ChessGame::ChessGame() {
 }
 
 ChessGame::ChessGame(std::string moveList) {
+    mGameStatus = true;
+    mTurn = 0;
     mWhitePlayer = Player("White", Piece::Side::White);
     mBlackPlayer = Player("Black", Piece::Side::Black);
     mPlayerTurn = mWhitePlayer.side();
@@ -36,9 +40,10 @@ bool ChessGame::move(const std::string& from, const std::string& to) {
                 mMoveList.push_back(std::make_pair(posFrom, posTo));
                 rotateTurn();
                 if (isCheck()) {
-                    std::cout << "Opponent Checked" << std::endl;
+                    std::cout << "Opponent is in check" << std::endl;
                     if (isCheckMate()) {
-                        std::cout << "Opponent check mated" << std::endl;
+                        std::cout << "Opponent is in check mate" << std::endl;
+                        mGameStatus = false;
                     }
                 }
                 return true;
@@ -81,11 +86,21 @@ void ChessGame::action(const std::string& from, const std::string& to) {
         }
         else if (mBoard->at(toPos).side() == Piece::Side::None) {
             std::cout << "Move from " << from << " To " << to << std::endl;
-            if (!move(from, to)) std::cout << "Invalid move" << std::endl;
+            if (move(from, to)) {
+                mTurn++;
+            }
+            else {
+                std::cout << "Invalid move" << std::endl;
+            }
         }
         else if (mBoard->at(fromPos).side() != mBoard->at(toPos).side()) {
             std::cout << "Eat from " << from << " To " << to << std::endl;
-            if (!eat(from, to)) std::cout << "Invalid eat" << std::endl;
+            if (eat(from, to)) {
+                mTurn++;
+            }
+            else {
+                std::cout << "Invalid eat" << std::endl;
+            }
         }
     }
     else {
@@ -108,9 +123,10 @@ bool ChessGame::eat(const std::string& from, const std::string& to) {
                 mMoveList.push_back(std::make_pair(posFrom, posTo));
                 rotateTurn();
                 if (isCheck()) {
-                    std::cout << "Opponent Checked" << std::endl;
+                    std::cout << "Opponent is in checkMove" << std::endl;
                     if (isCheckMate()) {
-                        std::cout << "Opponent check mated" << std::endl;
+                        std::cout << "Opponent is in check mate" << std::endl;
+                        mGameStatus = false;
                     }
                 }
                 return true;
@@ -225,4 +241,29 @@ bool ChessGame::isCheckMate() {
         }
     }
     return false;
+}
+
+void ChessGame::start() {
+    std::cout << "Game Start" << std::endl;
+    while (mGameStatus) {
+        std::cout << Piece::sideStrings[playersTurn()] << " turn" << std::endl;
+        draw();
+        Command com = Input::get();
+        if (com.name() == "Move" || com.name() == "move" || com.name() == "M" ||com.name() == "m") {
+            std::vector<std::string> moves;
+            for (auto arg : com.arguments()) {
+                if (ChessPosition::isValidPos(arg)) moves.push_back(arg);
+            }
+            if (moves.size() == 2) {
+                action(moves[0], moves[1]);
+            }
+            else {
+                std::cout << "Not legitemate move!" << std::endl;
+            }
+        }
+        else {
+            std::cout << "Invalid command!" << std::endl;
+        }
+    }
+    std::cout << "The game has ended! The winner is " << winner() << " After " << mTurn << " Turns." << std::endl;
 }

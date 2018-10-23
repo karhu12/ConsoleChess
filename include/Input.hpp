@@ -1,16 +1,15 @@
 #pragma once
+#include <Command.hpp>
+#include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <iterator>
 
 class Input {
 public:
-    static void get();
-    static std::string getCommand() { return mCommand; }
-    static const std::vector<std::string>& getArguments() { return mArgs; }
+    static const Command get();
 
-private:
-    static std::string mCommand;
-    static std::vector<std::string> mArgs;
 };
 
 
