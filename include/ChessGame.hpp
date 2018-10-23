@@ -32,7 +32,7 @@ public:
 
     const std::vector<std::pair<ChessPosition, ChessPosition>>& moveList() const { return mMoveList; }
 
-    std::string playersTurn() const { return mPlayerTurn; }
+    Piece::Side playersTurn() const { return mPlayerTurn; }
 
     bool isCheck();
     bool isCheckMate();
@@ -41,8 +41,8 @@ public:
 private:
     std::unique_ptr<ChessBoard> mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;
-    Player mPlayerOne, mPlayerTwo;
-    std::string mPlayerTurn;
+    Player mWhitePlayer, mBlackPlayer;
+    Piece::Side mPlayerTurn;
 
     void rotateTurn();
 

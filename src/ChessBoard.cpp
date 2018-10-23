@@ -47,8 +47,8 @@ bool ChessBoard::isPosOutOfBounds(const ChessPosition& pos) {
 }
 
 //Function validates if moving a piece to a neutral tile position is valid
-//Function also checks if there is collision between the movement
-bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to) {
+//Function also checks if there is collision between the movement, if ignoreKing is true then the collision is not checked from king. parameter used on check mate checking.
+bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to, bool ignoreKing) {
     ChessPiece pieceWith(at(from)), pieceTo(at(to));
     if (ChessBoard::isPosOutOfBounds(from) || ChessBoard::isPosOutOfBounds(to) || from == to) {
         return false;
@@ -60,7 +60,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
             switch (withMove) {
                 //Correct by default because it is checked from the move list in movement class
                 case Piece::MoveType::LShape:
-                    if (checkCollision(from, to, true)) {
+                    if (checkCollision(from, to, true, ignoreKing)) {
                         return false;
                     }
                     return true;
@@ -68,7 +68,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
                     //each direction is powered by two in squareroot to produce positive numbers which are then summed
                     //and divided by two which gives the total movement to diagonal direction
                     if ((move.xMovement() + move.yMovement()) / 2 <= pieceWith.moveAmount()) {
-                        if (checkCollision(from, to, true)) {
+                        if (checkCollision(from, to, true, ignoreKing)) {
                             return false;
                         }
                         return true;
@@ -76,7 +76,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
                     return false;
                 case Piece::MoveType::Horizontal:
                     if (move.xMovement() <= pieceWith.moveAmount()) {
-                        if (checkCollision(from, to, true)) {
+                        if (checkCollision(from, to, true, ignoreKing)) {
                             return false;
                         }
                         return true;
@@ -91,7 +91,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to)
                     }
                     else {
                         if (move.yMovement() <= pieceWith.moveAmount()) {
-                            if (checkCollision(from, to, true)) {
+                            if (checkCollision(from, to, true, ignoreKing)) {
                                 return false;
                             }
                             return true;
@@ -130,7 +130,7 @@ bool ChessBoard::isValidPos(int x, int y) {
 //To-Do Too much if clauses in diagonal movement
 //Function checks collision from movement on board based on the move type
 //Currently function assumes the move is correct so that is not checked
-bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd) {
+bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd, bool ignoreKing) {
     Movement move(from, to);
     //Cant move to where you started
     if (from == to)
@@ -146,32 +146,60 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
             //Check if the diagonal movement is towards positive x and negative y
             if (move.x() > 0 && move.y() < 0) {
                 for (tempX++, tempY--; tempX <= (checkEnd ? to.x() : to.x() - 1) && tempY >= (checkEnd ? to.y() : to.y() + 1); tempX++, tempY--) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
             //Check if the diagonal movement is towards positive x and positive y
             else if (move.x() > 0 && move.y() > 0) {
                 for (tempX++, tempY++; tempX <= (checkEnd ? to.x() : to.x() - 1) && tempY <= (checkEnd ? to.y() : to.y() - 1); tempX++, tempY++) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
             //Check if the diagonal movement is towards negative x and positive y
             else if (move.x() < 0 && move.y() > 0) {
                 for (tempX--, tempY++; tempX >= (checkEnd ? to.x() : to.x() + 1) && tempY <= (checkEnd ? to.y() : to.y() - 1); tempX--, tempY++) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
             //Check if the diagonal movement is towards negative x and negative y
             else if (move.x() < 0 && move.y() < 0) {
                 for (tempX--, tempY--; tempX >= (checkEnd ? to.x() : to.x() + 1) && tempY >= (checkEnd ? to.y() : to.y() + 1); tempX--, tempY--) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
@@ -180,15 +208,29 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
             //Check if the horizontal movement is towards positive x
             if (move.x() > 0) {
                 for (tempX++; tempX <= (checkEnd ? to.x() : to.x() - 1); tempX++) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
             }
             //Check if the horizontal movement is towards negative x
             else if (move.x() < 0) {
                 for (tempX--; tempX >= (checkEnd ? to.x() : to.x() + 1); tempX--) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
@@ -196,15 +238,29 @@ bool ChessBoard::checkCollision(const ChessPosition& from, const ChessPosition& 
             //Check if the vertical movement is towards positive y
             if (move.y() > 0) {
                 for (tempY++; tempY <= (checkEnd ? to.y() : to.y() - 1); tempY++) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
             }
             //Check if the vertical movement is towards negative y
             else if (move.y() < 0) {
                 for (tempY--; tempY >= (checkEnd ? to.y() : to.y() + 1); tempY--) {
-                    if (at(tempX, tempY).side() != Piece::Side::None)
-                        return true;
+                    if (at(tempX, tempY).side() != Piece::Side::None) {
+                        if (ignoreKing) {
+                            if (at(tempX, tempY).type() != Piece::Type::King)
+                                return true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
@@ -321,7 +377,7 @@ ChessPosition ChessBoard::firstPiecePosition(Piece::Side side) {
 
 
 
-std::vector<ChessPosition> ChessBoard::pieceMoves(const ChessPosition& piecePos) {
+std::vector<ChessPosition> ChessBoard::pieceMovePositions(const ChessPosition& piecePos) {
     std::vector<ChessPosition> moves;
     for (int i = 0; i < ChessBoard::board_height*ChessBoard::board_width; i++) {
         if (isValidMove(ChessPosition(piecePos), ChessPosition(i))) {
@@ -329,6 +385,16 @@ std::vector<ChessPosition> ChessBoard::pieceMoves(const ChessPosition& piecePos)
         }
     }
     return moves;
+}
+
+std::vector<ChessPosition> ChessBoard::pieceEatPositions(const ChessPosition& piecePos) {
+    std::vector<ChessPosition> eatPositions;
+    for (int i = 0; i < ChessBoard::board_height*ChessBoard::board_width; i++) {
+        if (isValidEat(ChessPosition(piecePos), ChessPosition(i))) {
+            eatPositions.push_back(ChessPosition(i));
+        }
+    }
+    return eatPositions;
 }
 
 //Function returns all possible moves from starting position the end position (leaves start out).
