@@ -13,15 +13,15 @@ public:
     static constexpr int board_width = 8;
     static constexpr int board_height = 8;
     
-    const ChessPiece& at(int x, int y) {
+    ChessPiece& at(int x, int y) {
         return mBoard[board_height * y + x];
     }
 
-    const ChessPiece& at(const ChessPosition& pos) {
+    ChessPiece& at(const ChessPosition& pos) {
         return mBoard[board_height * pos.y() + pos.x()];
     }
 
-    const ChessPiece& at(int i) {
+    ChessPiece& at(int i) {
         return mBoard[i];
     }
 
@@ -35,13 +35,29 @@ public:
 
     const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }
 
-    static bool isValidMove(const ChessPosition& from, const ChessPosition& to, const ChessPiece& with);
+    bool isValidMove(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool ignoreKing = false);
+
+    bool isValidEat(const ChessPosition& from, const ChessPosition& to);
     
     static bool isValidPos(int x, int y);
 
     static bool isPosOutOfBounds(const ChessPosition& pos);
 
     void movePiece(const ChessPosition& from, const ChessPosition& to);
+    
+    bool checkCollision(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool checkEnd = true, bool ignoreKing = false);
+
+    std::vector<ChessPosition> piecePositions(Piece::Type type, Piece::Side side);
+    std::vector<ChessPosition> piecePositions(Piece::Side side);
+    ChessPosition firstPiecePosition(Piece::Type type, Piece::Side side);
+    ChessPosition firstPiecePosition(Piece::Side side);
+
+    std::vector<ChessPosition> movePositions(const ChessPosition& from, const ChessPosition& to);
+
+    std::vector<ChessPosition> pieceMovePositions(const ChessPosition& piecePos);
+    std::vector<ChessPosition> pieceEatPositions(const ChessPosition& piecePos);
+
+    bool isMoveBlockable(const ChessPosition& from, const ChessPosition& to);
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;

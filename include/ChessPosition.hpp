@@ -3,8 +3,10 @@
 
 class ChessPosition {
 public:
+    ChessPosition() { mX = 0; mY = 0; mMove = "A8"; }
+    ChessPosition(int index);
     ChessPosition(int xPos, int yPos);
-    ChessPosition(std::string pos);
+    ChessPosition(const std::string& pos);
 
     static std::string toMove(int xPos, int yPos);
 
@@ -22,6 +24,10 @@ public:
     }
 
     static bool isValidPos(const std::string& pos);
+
+    void setPos(int index);
+    void setPos(int xPos, int yPos);
+    void setPos(const std::string& pos);
 
 private:
     int mX, mY;
