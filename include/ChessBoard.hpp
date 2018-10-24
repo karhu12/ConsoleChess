@@ -35,7 +35,7 @@ public:
 
     const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }
 
-    bool isValidMove(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool ignoreKing = false);
+    bool isValidMove(const ChessPosition& from, const ChessPosition& to, bool ignoreKing = false);
 
     bool isValidEat(const ChessPosition& from, const ChessPosition& to);
     
@@ -45,7 +45,7 @@ public:
 
     void movePiece(const ChessPosition& from, const ChessPosition& to);
     
-    bool checkCollision(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool checkEnd = true, bool ignoreKing = false);
+    bool checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd = true, bool ignoreKing = false);
 
     std::vector<ChessPosition> piecePositions(Piece::Type type, Piece::Side side);
     std::vector<ChessPosition> piecePositions(Piece::Side side);

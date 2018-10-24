@@ -247,7 +247,6 @@ void ChessGame::start() {
     std::cout << "Game Start" << std::endl;
     while (mGameStatus) {
         std::cout << Piece::sideStrings[playersTurn()] << " turn" << std::endl;
-        draw();
         Command com = Input::get();
         if (com.name() == "Move" || com.name() == "move" || com.name() == "M" ||com.name() == "m") {
             std::vector<std::string> moves;

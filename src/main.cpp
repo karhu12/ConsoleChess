@@ -1,5 +1,4 @@
 #define OLC_PGE_APPLICATION
-#include <ChessGame.hpp>
 #include <Ui.hpp>
 
 /*
@@ -9,7 +8,7 @@ Created by OneLoneCoder
 
 int main() {
     Ui ui;
-    if (ui.Construct(256, 240, 4, 4))
+    if (ui.Construct(512, 512, 1, 1))
         ui.Start();
     return 0;
 }

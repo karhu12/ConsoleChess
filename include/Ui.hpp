@@ -1,27 +1,25 @@
 #pragma once
 #include <olcPixelGameEngine.h>
+#include <ChessGame.hpp>
 
-class Ui : public olc::PixelGameEngine
-	{
-	public:
-		Ui()
-		{
-			sAppName = "Example";
-		}
+class Ui : public olc::PixelGameEngine {
+public:
+	Ui();
+	~Ui();
 
-	public:
-		bool OnUserCreate() override
-		{
-			// Called once at the start, so create things here
-			return true;
-		}
+public:
+	bool OnUserCreate() override;
 
-		bool OnUserUpdate(float fElapsedTime) override
-		{
-			// called once per frame, draws random coloured pixels
-			for (int x = 0; x < ScreenWidth(); x++)
-				for (int y = 0; y < ScreenHeight(); y++)
-					Draw(x, y, olc::Pixel(rand() % 255, rand() % 255, rand()% 255));
-			return true;
-		}
-	};
+	bool OnUserUpdate(float fElapsedTime) override;
+
+	void drawChessBoard(int x, int y);
+
+	
+
+private:
+	ChessGame* game;
+    olc::Sprite* mWhiteTile;
+    olc::Sprite* mBlackTile;
+    olc::Sprite* mBoardBorder;
+	int mBoardBorderSz;
+};
