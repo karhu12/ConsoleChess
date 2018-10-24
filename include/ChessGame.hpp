@@ -16,7 +16,7 @@ public:
     ChessGame();
     ChessGame(std::string moveList);
 
-    char getPieceAt(int x, int y) const { return mBoard->at(x,y).typeToChar(); }
+    const ChessPiece getPieceAt(int x, int y) { return mBoard->at(x,y); }
 
     void start();
 

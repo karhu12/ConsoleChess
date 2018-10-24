@@ -14,11 +14,11 @@ public:
     static constexpr int board_height = 8;
     
     ChessPiece& at(int x, int y) {
-        return mBoard[board_height * y + x];
+        return mBoard[board_width * y + x];
     }
 
     ChessPiece& at(const ChessPosition& pos) {
-        return mBoard[board_height * pos.y() + pos.x()];
+        return mBoard[board_width * pos.y() + pos.x()];
     }
 
     ChessPiece& at(int i) {
@@ -26,11 +26,11 @@ public:
     }
 
     int indexAt(ChessPosition pos) const {
-        return board_height * pos.y() + pos.x(); 
+        return board_width * pos.y() + pos.x(); 
     }
 
     int indexAt(int x, int y) const {
-        return board_height * y + x; 
+        return board_width * y + x; 
     }
 
     const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }

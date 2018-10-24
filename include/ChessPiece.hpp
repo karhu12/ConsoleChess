@@ -4,11 +4,11 @@
 #include <ChessPosition.hpp>
 
 namespace Piece {
-    const std::string typeStrings[7] = { "Tile", "King", "Queen", "Rook", "Bishop", "Knight", "Pawn" };
-    enum Type { Tile, King, Queen, Rook, Bishop, Knight, Pawn };
-    const std::string sideStrings[3] = { "None", "Black", "White" };
-    enum Side { None, Black, White };
-    const std::string moveTypeStrings[5] = { "Invalid", "Horizontal", "Vertical", "Diagonal", "LShape" };
+    const std::string typeStrings[7] = { "King", "Queen", "Rook", "Bishop", "Knight", "Pawn", "Tile" };
+    enum Type { King, Queen, Rook, Bishop, Knight, Pawn, Tile };
+    const std::string sideStrings[3] = { "Black", "White", "None" };
+    enum Side { Black, White, None };
+    const std::string moveTypeStrings[5] = { "Horizontal", "Vertical", "Diagonal", "LShape", "Invalid" };
     enum MoveType { Invalid, Horizontal, Vertical, Diagonal, LShape };
 }
 
