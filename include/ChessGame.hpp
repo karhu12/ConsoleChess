@@ -14,18 +14,14 @@
 class ChessGame {
 public:
     ChessGame();
+    ChessGame(const Player& white, const Player& black);
     ChessGame(std::string moveList);
 
-    const ChessPiece getPieceAt(int x, int y) { return mBoard->at(x,y); }
+    const ChessPiece& getPieceAt(int x, int y) { return mBoard.at(x,y); }
 
     void start();
 
-    void action(const std::string& from, const std::string& to);
-
-    bool move(const std::string& from, const std::string& to);
-    
-    bool eat(const std::string& from, const std::string& to);
-
+    std::string moveAction(const std::string& from, const std::string& to);
     const std::vector<std::pair<ChessPosition, ChessPosition>>& moveList() const { return mMoveList; }
 
     Piece::Side playersTurn() const { return mPlayerTurn; }
@@ -47,7 +43,7 @@ public:
 
 
 private:
-    std::unique_ptr<ChessBoard> mBoard;
+    ChessBoard mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;
     Player mWhitePlayer, mBlackPlayer;
     Piece::Side mPlayerTurn;
@@ -57,4 +53,9 @@ private:
     void rotateTurn();
 
     bool isPlayerTurn(const ChessPosition& from);
+
+    bool move(const std::string& from, const std::string& to);
+    
+    bool eat(const std::string& from, const std::string& to);
+
 };

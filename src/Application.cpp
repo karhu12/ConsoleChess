@@ -1,69 +1,71 @@
 #include "Application.hpp"
+#include "ChessUi.hpp"
 
 Application::Application() {
+    mState = State::Login;
 	sAppName = "Console Chess";
-    mGame = std::make_unique<ChessGame>();
 }
 
 bool Application::OnUserCreate() {
-    mWhiteTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_tile.png");
-    mBlackTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_tile.png");
-    mBoardBorder = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/board.png");
-    mBoardBorderSz = ((mBoardBorder->width - (mWhiteTile->width * 8)) / 2);
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_pawn.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_pawn.png"));
     return true;
 }
 
 bool Application::OnUserUpdate(float fElapsedTime)  {
-    drawChessBoard(50, 50);
+    static std::string start, end, user;
+    char ch;
+    switch (mState) {/*
+        case State::Login:
+            getInput(user);
+            DrawString(15, 15, user);
+            if (GetKey(olc::ENTER).bPressed) {
+                //Check if valid user from db etc.
+                mState = State::Browse;
+            }
+            break;*/
+        case State::Login:
+            //Allow player to join new match
+            mGame = std::make_unique<ChessGame>(Player(user, Piece::Side::White), Player("Opponent", Piece::Side::Black));
+            mUi = std::make_unique<ChessUi>(this, *mGame);
+            mState = State::Game;
+            break;
+        case State::Game:
+            
+            mUi->draw(50, 50);
+            if (GetMouse(0).bPressed) {
+                ChessUi temp(*mUi, *mGame);
+                start = temp.getChessPositionAtMouse(50, 50);
+            }
+            else if (GetMouse(0).bReleased) {
+                ChessUi temp(*mUi, *mGame);
+                end = temp.getChessPositionAtMouse(50, 50);
+                for (int y = 0; y < ScreenHeight(); y++)
+                    for (int x = 0; x < ScreenWidth(); x++)
+                        Draw(x, y, olc::BLACK);
+                        
+                DrawString(ScreenWidth() / 3, 5, mGame->moveAction(start, end));
+            }
+            break;
+        default:
+            break;
+    }
     return true;
 }
 
-void Application::drawChessBoard(int x, int y) {
-    DrawSprite(x, y, mBoardBorder.get());
-    for (int forY = 0; forY < 8; forY++) {
-        for (int forX = 0; forX < 8; forX++) {
-            if (forX % 2 == 0) {
-                if (forY % 2 == 0) {
-                    DrawSprite(x + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mWhiteTile.get());
-                }
-                else {	
-                    DrawSprite(x + forX * mBlackTile->width + mBoardBorderSz, y + forY * mBlackTile->height + mBoardBorderSz, mBlackTile.get());
-                }
-            }
-            else {
-                if (forY % 2 == 0) {
-                    DrawSprite(x + forX * mBlackTile->width + mBoardBorderSz, x+ forY * mBlackTile->height + mBoardBorderSz, mBlackTile.get());
-                }
-                else {
-                    DrawSprite(y + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mWhiteTile.get());
-                }
-            }
-            if (mGame->getPieceAt(forX,forY).type() != Piece::Type::Tile) {
-                SetPixelMode(olc::Pixel::ALPHA);
-                ChessPiece temp = mGame->getPieceAt(forX, forY);
-                DrawSprite(x + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mChessPieces[temp.type() + 1 + temp.side() * 6 - 1].get());
-                SetPixelMode(olc::Pixel::NORMAL);
-            }
-        }
+void Application::getInput(std::string& target) {
+    for (int i = 0; i <= olc::Key::Z; i++) {
+        if (GetKey((olc::Key)i).bPressed)
+            if (GetKey(olc::SHIFT).bHeld)
+                target += (char)('A' + i);
+            else
+                target += (char)('a' + i);
     }
-    for (int forX = 0; forX < ChessBoard::board_width; forX++) {
-        DrawString(x + forX * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, y - mWhiteTile->height / 2 - mBoardBorderSz, std::string(1, ('A' + (char)forX)));
-        DrawString(x + forX * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, y + mWhiteTile->height * 8 + mWhiteTile->height / 2 + mBoardBorderSz, std::string(1, ('A' + (char)forX)));
+    for (int i = olc::Key::K0; i <= olc::Key::K9; i++) {
+        if (GetKey((olc::Key)i).bPressed)
+            target += (char)('0' + (i - olc::Key::K0));
     }
-    for (int forY = 0; forY < ChessBoard::board_height; forY++) {
-        DrawString(x - mWhiteTile->height / 2 - mBoardBorderSz, y + forY * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, std::string(1, ('8' - (char)forY)));
-        DrawString(x + mWhiteTile->height * 8 + mWhiteTile->height / 2 + mBoardBorderSz, y + forY * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, std::string(1, ('8'- (char)forY)));
-    }
+    if (GetKey(olc::SPACE).bPressed)
+        target += " ";
+    if (GetKey(olc::BACK).bPressed || GetKey(olc::DEL).bPressed)
+        target.pop_back();
+    
 }

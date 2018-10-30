@@ -1,4 +1,5 @@
 #define OLC_PGE_APPLICATION
+#include <Ui.hpp>
 #include <Application.hpp>
 
 /*

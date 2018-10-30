@@ -2,24 +2,25 @@
 #include <olcPixelGameEngine.h>
 #include <ChessGame.hpp>
 
+class Ui;
+
 class Application : public olc::PixelGameEngine {
 public:
 	Application();
+
+	enum State { Login, Browse, Game };
 
 public:
 	bool OnUserCreate() override;
 
 	bool OnUserUpdate(float fElapsedTime) override;
 
-	void drawChessBoard(int x, int y);
+	void getInput(std::string& target);
 
 	
 
 private:
 	std::unique_ptr<ChessGame> mGame;
-    std::unique_ptr<olc::Sprite> mWhiteTile;
-    std::unique_ptr<olc::Sprite> mBlackTile;
-    std::unique_ptr<olc::Sprite> mBoardBorder;
-	std::vector<std::unique_ptr<olc::Sprite>> mChessPieces;
-	int mBoardBorderSz;
+	std::unique_ptr<Ui> mUi;
+	State mState;
 };
