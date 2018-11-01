@@ -32,12 +32,10 @@ bool Application::OnUserUpdate(float fElapsedTime)  {
             
             mUi->draw(50, 50);
             if (GetMouse(0).bPressed) {
-                ChessUi temp(*mUi, *mGame);
-                start = temp.getChessPositionAtMouse(50, 50);
+                start = mUi->clickedElement();
             }
             else if (GetMouse(0).bReleased) {
-                ChessUi temp(*mUi, *mGame);
-                end = temp.getChessPositionAtMouse(50, 50);
+                end = mUi->clickedElement();
                 for (int y = 0; y < ScreenHeight(); y++)
                     for (int x = 0; x < ScreenWidth(); x++)
                         Draw(x, y, olc::BLACK);

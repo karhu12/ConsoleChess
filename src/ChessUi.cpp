@@ -1,91 +1,69 @@
 #include "ChessUi.hpp"
 
 ChessUi::ChessUi(olc::PixelGameEngine* mEngine, ChessGame& game) : Ui(mEngine), mGame(game) {
-    mBoardBorderSz = 8;
-    mWhiteTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_tile.png");
-    mBlackTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_tile.png");
-    mBoardBorder = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/board.png");
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_pawn.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_pawn.png"));
+    mSprites["White Tile"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_tile.png");
+    mSprites["Black Tile"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_tile.png");
+    mSprites["Board"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/board.png");
+    mSprites["Black King"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_king.png");
+    mSprites["Black Queen"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_queen.png");
+    mSprites["Black Rook"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_rook.png");
+    mSprites["Black Bishop"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_bishop.png");
+    mSprites["Black Knight"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_knight.png");
+    mSprites["Black Pawn"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_pawn.png");
+    mSprites["White King"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_king.png");
+    mSprites["White Queen"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_queen.png");
+    mSprites["White Rook"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_rook.png");
+    mSprites["White Bishop"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_bishop.png");
+    mSprites["White Knight"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_knight.png");
+    mSprites["White Pawn"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_pawn.png");
+
+    mElements["Board"] = Element(0, 0, mSprites["Board"].get(), "Board");
+    for (char l = 'A'; l <= 'H'; l++) {
+        for (char n = '8'; n >= '1'; n--) {
+            std::string chPosStr = std::string() + l + n;
+            ChessPosition chPos(chPosStr);
+            mElements[chPos.move()] = Element(chPos.x() * TileSize + BorderSize, chPos.y() * TileSize + BorderSize, mSprites[tileColorAt(chPos.move())].get(), chPos.move());
+        }
+    }
 }
 
-ChessUi::ChessUi(Ui& ui, ChessGame& game) : Ui(ui), mGame(game) {
-    mBoardBorderSz = 8;
-    mWhiteTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_tile.png");
-    mBlackTile = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_tile.png");
-    mBoardBorder = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/board.png");
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/black_pawn.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_king.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_queen.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_rook.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_bishop.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_knight.png"));
-    mChessPieces.push_back(std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_pawn.png"));
-}
-
-
-void ChessUi::drawChessBoard(int x, int y) {
-    mEngine->DrawSprite(x, y, mBoardBorder.get());
-    for (int forY = 0; forY < 8; forY++) {
-        for (int forX = 0; forX < 8; forX++) {
-            if (forX % 2 == 0) {
-                if (forY % 2 == 0) {
-                    mEngine->DrawSprite(x + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mWhiteTile.get());
-                }
-                else {	
-                    mEngine->DrawSprite(x + forX * mBlackTile->width + mBoardBorderSz, y + forY * mBlackTile->height + mBoardBorderSz, mBlackTile.get());
-                }
-            }
-            else {
-                if (forY % 2 == 0) {
-                    mEngine->DrawSprite(x + forX * mBlackTile->width + mBoardBorderSz, x+ forY * mBlackTile->height + mBoardBorderSz, mBlackTile.get());
-                }
-                else {
-                    mEngine->DrawSprite(y + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mWhiteTile.get());
-                }
-            }
-            if (mGame.getPieceAt(forX,forY).type() != Piece::Type::Tile) {
-                mEngine->SetPixelMode(olc::Pixel::ALPHA);
-                ChessPiece temp = mGame.getPieceAt(forX, forY);
-                mEngine->DrawSprite(x + forX * mWhiteTile->width + mBoardBorderSz, y + forY * mWhiteTile->height + mBoardBorderSz, mChessPieces[temp.type() + 1 + temp.side() * 6 - 1].get());
-                mEngine->SetPixelMode(olc::Pixel::NORMAL);
+void ChessUi::draw(int x, int y) {
+    int pieces = 0;
+    //Temporary solution to keep track of the pieces on ui
+    //We load the chess piece elements to the element map every time we make a draw call and remove them after using them to keep it dynamic
+    for (char l = 'A'; l <= 'H'; l++) {
+        for (char n = '8'; n >= '1'; n--) {
+            std::string chPosStr = std::string() + l + n;
+            ChessPosition chPos(chPosStr);
+            ChessPiece pc = mGame.getPieceAt(chPos.x(), chPos.y());
+            if (pc.type() != Piece::Type::Tile) {
+                //Gets the name of piece eg. "Black Rook" which is used to load the sprite
+                std::string pieceName = pc.sideToString() + " " + pc.typeToString();
+                mElements["Piece" + std::to_string(pieces++)] = Element(chPos.x() * TileSize + BorderSize, chPos.y() * TileSize + BorderSize, mSprites[pieceName].get(), pieceName);
             }
         }
     }
+    mOffsetX = x; mOffsetY = y;
+    mEngine->SetPixelMode(olc::Pixel::ALPHA);
+    drawElements(x, y);
+    mEngine->SetPixelMode(olc::Pixel::NORMAL);
+    while (pieces >= 0)
+        mElements.erase("Piece" + std::to_string(pieces--));
+
     for (int forX = 0; forX < ChessBoard::board_width; forX++) {
-        mEngine->DrawString(x + forX * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, y - mWhiteTile->height / 2 - mBoardBorderSz, std::string(1, ('A' + (char)forX)));
-        mEngine->DrawString(x + forX * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, y + mWhiteTile->height * 8 + mWhiteTile->height / 2 + mBoardBorderSz, std::string(1, ('A' + (char)forX)));
+        mEngine->DrawString(x + forX * TileSize + TileSize * 0.5 + BorderSize, y - TileSize * 0.5 - BorderSize, std::string(1, ('A' + (char)forX)));
+        mEngine->DrawString(x + forX * TileSize + TileSize * 0.5 + BorderSize, y + TileSize * 8 + TileSize * 0.5 + BorderSize, std::string(1, ('A' + (char)forX)));
     }
     for (int forY = 0; forY < ChessBoard::board_height; forY++) {
-        mEngine->DrawString(x - mWhiteTile->height / 2 - mBoardBorderSz, y + forY * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, std::string(1, ('8' - (char)forY)));
-        mEngine->DrawString(x + mWhiteTile->height * 8 + mWhiteTile->height / 2 + mBoardBorderSz, y + forY * mWhiteTile->width + mWhiteTile->width / 2 + mBoardBorderSz, std::string(1, ('8'- (char)forY)));
+        mEngine->DrawString(x - TileSize * 0.5 - BorderSize, y + forY * TileSize + TileSize * 0.5 + BorderSize, std::string(1, ('8' - (char)forY)));
+        mEngine->DrawString(x + TileSize * 8 + TileSize * 0.5 + BorderSize, y + forY * TileSize + TileSize * 0.5 + BorderSize, std::string(1, ('8'- (char)forY)));
     }
 }
 
-
-std::string ChessUi::getChessPositionAtMouse(int boardStartX, int boardStartY) {
-    int mouseX = (int)mEngine->GetMouseX(), mouseY = (int)mEngine->GetMouseY();
-    for (int y = 0; y < ChessBoard::board_height; y++) {
-        for (int x = 0; x < ChessBoard::board_width; x++) {
-            if (mouseY >= y * mWhiteTile->height + mBoardBorderSz + boardStartY && mouseY <= y * mWhiteTile->height + mBoardBorderSz + mWhiteTile->height + boardStartY)
-                if (mouseX >= x * mWhiteTile->width + mBoardBorderSz + boardStartX && mouseX <= x * mWhiteTile->width + mBoardBorderSz + mWhiteTile->width + boardStartX)
-                    return ChessPosition::toMove(x, y);
-        }
-    }
-    return "";
+std::string ChessUi::tileColorAt(const std::string& pos) {
+    ChessPosition p(pos);
+    if (p.y() % 2 == 0)
+        return (p.x() % 2 == 0 ? "White Tile" : "Black Tile");
+    else
+        return (p.x() % 2 == 0 ? "Black Tile" : "White Tile"); 
 }

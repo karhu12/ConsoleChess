@@ -62,7 +62,8 @@
         "xlocmes": "cpp",
         "xlocmon": "cpp",
         "xloctime": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "string_view": "cpp"
     },
     "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe"
 }

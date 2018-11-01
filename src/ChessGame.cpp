@@ -244,6 +244,8 @@ bool ChessGame::isCheckMate() {
                         mBoard.movePiece(ally, contestor.first);
                         if (!isCheck()) {
                             contestorsEaten++;
+                            mBoard.movePiece(contestor.first, ally);
+                            mBoard.at(contestor.first) = temp;
                             break;
                         }
                         mBoard.movePiece(contestor.first, ally);

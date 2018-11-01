@@ -4,21 +4,33 @@
 class ChessUi : public Ui {
 public:
     ChessUi(olc::PixelGameEngine* pge, ChessGame& game);
-    ChessUi(Ui& ui, ChessGame& game);
 
-    void draw(int x, int y) override {
-        drawChessBoard(x, y);
+    void draw(int x = 0, int y = 0) override;
+
+    std::string clickedElement() override {
+        int mouseX = mEngine->GetMouseX();
+        int mouseY = mEngine->GetMouseY();
+
+        for (const auto& elem : mElements) {
+            if (mouseX >= elem.second.x + mOffsetX && mouseX < elem.second.x + mOffsetX + TileSize) {
+                if (mouseY >= elem.second.y + mOffsetY && mouseY < elem.second.y + mOffsetY + TileSize)
+                    return elem.second.name;
+            }
+        }
     }
 
-    void drawChessBoard(int x, int y);
+    static constexpr int TileSize = 48;
+    static constexpr int BorderSize = 8;
 
-    std::string getChessPositionAtMouse(int boardStartX, int boardStartY);
 
 private:
-    std::unique_ptr<olc::Sprite> mWhiteTile;
-    std::unique_ptr<olc::Sprite> mBlackTile;
-    std::unique_ptr<olc::Sprite> mBoardBorder;
-	std::vector<std::unique_ptr<olc::Sprite>> mChessPieces;
     ChessGame& mGame;
-	int mBoardBorderSz;
+    
+    void drawChessBoard(int x, int y);
+
+    void updateElementPositions();
+
+    std::string tileColorAt(const std::string& pos);
+
+    std::string getChessPositionAtMouse();
 };
