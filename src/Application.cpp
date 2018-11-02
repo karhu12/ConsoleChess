@@ -1,5 +1,6 @@
 #include "Application.hpp"
 #include "ChessUi.hpp"
+#include "LoginUi.hpp"
 
 Application::Application() {
     mState = State::Login;
@@ -7,26 +8,28 @@ Application::Application() {
 }
 
 bool Application::OnUserCreate() {
+    mUi = std::make_unique<LoginUi>(this);
     return true;
 }
 
 bool Application::OnUserUpdate(float fElapsedTime)  {
     static std::string start, end, user;
     char ch;
-    switch (mState) {/*
+    switch (mState) {
         case State::Login:
-            getInput(user);
-            DrawString(15, 15, user);
-            if (GetKey(olc::ENTER).bPressed) {
-                //Check if valid user from db etc.
-                mState = State::Browse;
+            mUi->draw();
+            if (GetMouse(0).bPressed) {
+                start = mUi->clickedElement();
+                if (start == "Play offline") {
+                    mState = State::Game;
+                    mGame = std::make_unique<ChessGame>(Player(user, Piece::Side::White), Player("Opponent", Piece::Side::Black));
+                    //mUi.release();
+                    mUi = std::make_unique<ChessUi>(this, *mGame);
+                }
             }
-            break;*/
-        case State::Login:
             //Allow player to join new match
-            mGame = std::make_unique<ChessGame>(Player(user, Piece::Side::White), Player("Opponent", Piece::Side::Black));
-            mUi = std::make_unique<ChessUi>(this, *mGame);
-            mState = State::Game;
+            /*
+            mState = State::Game;*/
             break;
         case State::Game:
             

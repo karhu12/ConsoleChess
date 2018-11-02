@@ -26,10 +26,20 @@ public:
 
     virtual void draw(int x = 0, int y = 0) = 0;
 
-    virtual std::string clickedElement() = 0;
+    virtual std::string clickedElement() {
+        int mouseX = mEngine->GetMouseX();
+        int mouseY = mEngine->GetMouseY();
+
+        for (const auto& elem : mElements) {
+            if (mouseX >= elem.second.x + mOffsetX && mouseX < elem.second.x + mOffsetX + elem.second.sprite->width) {
+                if (mouseY >= elem.second.y + mOffsetY && mouseY < elem.second.y + mOffsetY + elem.second.sprite->height)
+                    return elem.second.name;
+            }
+        }
+    }
 
     virtual void drawElements(int x = 0, int y = 0) {
-        for (auto elem : mElements) {
+        for (auto& elem : mElements) {
             mEngine->DrawSprite(elem.second.x + x, elem.second.y + y, elem.second.sprite);
         }
     }
