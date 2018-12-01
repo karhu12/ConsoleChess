@@ -17,6 +17,10 @@ public:
 
 	void getInput(std::string& target);
 
+	void login();
+
+	void offlineGame();
+
 	
 
 private:

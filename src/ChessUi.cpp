@@ -16,8 +16,8 @@ ChessUi::ChessUi(olc::PixelGameEngine* mEngine, ChessGame& game) : Ui(mEngine), 
     mSprites["White Bishop"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_bishop.png");
     mSprites["White Knight"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_knight.png");
     mSprites["White Pawn"] = std::make_unique<olc::Sprite>("D:/Ohjelmointi/ConsoleChess/images/white_pawn.png");
-
     mElements["Board"] = Element(0, 0, mSprites["Board"].get(), "Board");
+    //Make new elements for the Chess pieces to the correct positions of the board
     for (char l = 'A'; l <= 'H'; l++) {
         for (char n = '8'; n >= '1'; n--) {
             std::string chPosStr = std::string() + l + n;

@@ -7,16 +7,20 @@ public:
 
     void draw(int x = 0, int y = 0) override;
 
-    std::string clickedElement() override {
+    //Works just like the normal one but searched elements from different x,y space using the board offset
+    std::vector<Element> clickedElement() override {
         int mouseX = mEngine->GetMouseX();
         int mouseY = mEngine->GetMouseY();
+        std::vector<Element> elements;
 
         for (const auto& elem : mElements) {
             if (mouseX >= elem.second.x + mOffsetX && mouseX < elem.second.x + mOffsetX + TileSize) {
                 if (mouseY >= elem.second.y + mOffsetY && mouseY < elem.second.y + mOffsetY + TileSize)
-                    return elem.second.name;
+                    if (elem.second.shown)
+                        elements.push_back(elem.second);
             }
         }
+        return elements;
     }
 
     static constexpr int TileSize = 48;

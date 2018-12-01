@@ -13,38 +13,14 @@ bool Application::OnUserCreate() {
 }
 
 bool Application::OnUserUpdate(float fElapsedTime)  {
-    static std::string start, end, user;
-    char ch;
     switch (mState) {
         case State::Login:
-            mUi->draw();
-            if (GetMouse(0).bPressed) {
-                start = mUi->clickedElement();
-                if (start == "Play offline") {
-                    mState = State::Game;
-                    mGame = std::make_unique<ChessGame>(Player(user, Piece::Side::White), Player("Opponent", Piece::Side::Black));
-                    //mUi.release();
-                    mUi = std::make_unique<ChessUi>(this, *mGame);
-                }
-            }
-            //Allow player to join new match
-            /*
-            mState = State::Game;*/
+            login();
+            break;
+        case State::Browse:
             break;
         case State::Game:
-            
-            mUi->draw(50, 50);
-            if (GetMouse(0).bPressed) {
-                start = mUi->clickedElement();
-            }
-            else if (GetMouse(0).bReleased) {
-                end = mUi->clickedElement();
-                for (int y = 0; y < ScreenHeight(); y++)
-                    for (int x = 0; x < ScreenWidth(); x++)
-                        Draw(x, y, olc::BLACK);
-                        
-                DrawString(ScreenWidth() / 3, 5, mGame->moveAction(start, end));
-            }
+            offlineGame();
             break;
         default:
             break;
@@ -69,4 +45,57 @@ void Application::getInput(std::string& target) {
     if (GetKey(olc::BACK).bPressed || GetKey(olc::DEL).bPressed)
         target.pop_back();
     
+}
+
+void Application::login() {
+    mUi->draw();
+    if (GetMouse(0).bPressed) {
+        std::vector<Element> clicked = mUi->clickedElement();
+        if (clicked.size() == 1) {
+            if (clicked[0].name == "Play offline") {
+                mUi->flush();
+                mUi->showElement("Play online", false);
+                mUi->showElement("Play offline", false);
+                mUi->showElement("New Game");
+                mUi->showElement("Load Game");
+            }
+            else if (clicked[0].name == "Play online") {
+                mState = State::Browse;
+            }
+            else if (clicked[0].name == "New Game") {
+                mState = State::Game;
+                mGame = std::make_unique<ChessGame>(Player("Player", Piece::Side::White), Player("Opponent", Piece::Side::Black));
+                mUi = std::make_unique<ChessUi>(this, *mGame);
+            }
+            else if (clicked[0].name == "Load Game") {
+                mUi->flush();
+                mUi->showElement("New Game", false);
+                mUi->showElement("Load Game", false);
+            }
+        }
+    }
+}
+
+void Application::offlineGame() {
+    static std::string startPos, endPos;
+    mUi->draw(50, 50);
+    if (GetMouse(0).bPressed) {
+        std::vector<Element> clicked = mUi->clickedElement();
+        if (clicked.size() >= 1)
+            startPos = clicked[0].name;
+    }
+    else if (GetMouse(0).bReleased) {
+        std::vector<Element> clicked = mUi->clickedElement();
+        if (clicked.size() >= 1) {
+            endPos = clicked[0].name;
+            if (startPos != endPos) {
+                for (int y = 0; y < ScreenHeight(); y++)
+                    for (int x = 0; x < ScreenWidth(); x++)
+                        Draw(x, y, olc::BLACK);
+
+                std::string move =  mGame->moveAction(startPos, endPos);
+                DrawString(ScreenWidth() / 3, 5, move);
+            }
+        }
+    }
 }
