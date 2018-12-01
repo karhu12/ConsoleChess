@@ -59,6 +59,8 @@ public:
 
     bool isMoveBlockable(const ChessPosition& from, const ChessPosition& to);
 
+    void pawnPromote(const ChessPosition& pos, Piece::Type promoteType);
+
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;
 };

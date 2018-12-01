@@ -110,7 +110,7 @@ bool ChessBoard::isValidMove(const ChessPosition& from, const ChessPosition& to,
 void ChessBoard::movePiece(const ChessPosition& from, const ChessPosition& to) {
     mBoard[ChessBoard::indexAt(to)] = at(from);
     mBoard[ChessBoard::indexAt(from)] = ChessPiece(Piece::Type::Tile, Piece::Side::None);
-    //If it is pawns first movement its speed will be reduced to one tile per movement after the move
+    //Make pawn specific checks after moving the pieces
     if (at(to).type() == Piece::Type::Pawn) {
         if (at(to).moveAmount() == 2) {
             at(to).setMoveAmount(1);
@@ -501,5 +501,22 @@ bool ChessBoard::isMoveBlockable(const ChessPosition& from, const ChessPosition&
             return false;
         default:
             return true;
+    }
+}
+
+void ChessBoard::pawnPromote(const ChessPosition& pos, Piece::Type promoteType) {
+    switch (at(pos).side()) {
+        case Piece::Side::Black:
+            if (pos.y() == ChessBoard::board_height - 1) {
+                at(pos) = ChessPiece(Piece::Type::Queen, (Piece::Side)at(pos).side());
+            }
+            break;
+        case Piece::Side::White:
+            if (pos.y() == 0) {
+                at(pos) = ChessPiece(Piece::Type::Queen, (Piece::Side)at(pos).side());
+            }
+            break;
+        default:
+            break;
     }
 }

@@ -41,7 +41,6 @@ public:
         return "";
     }
 
-
 private:
     ChessBoard mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;

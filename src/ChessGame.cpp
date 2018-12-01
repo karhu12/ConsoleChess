@@ -43,6 +43,7 @@ bool ChessGame::move(const std::string& from, const std::string& to) {
                 mBoard.movePiece(to, from);
             }
             else {
+                mBoard.pawnPromote(to, Piece::Type::Queen);
                 mMoveList.push_back(std::make_pair(posFrom, posTo));
                 rotateTurn();
                 return true;
@@ -143,6 +144,7 @@ bool ChessGame::eat(const std::string& from, const std::string& to) {
                 mBoard.at(to) = temp;
             }
             else {
+                mBoard.pawnPromote(to, Piece::Type::Queen);
                 mMoveList.push_back(std::make_pair(posFrom, posTo));
                 rotateTurn();
                 return true;
