@@ -22,6 +22,10 @@ bool Application::OnUserUpdate(float fElapsedTime)  {
         case State::Game:
             offlineGame();
             break;
+        case State::WhiteWin:
+            break;
+        case State::BlackWin:
+            break;
         default:
             break;
     }
@@ -54,13 +58,9 @@ void Application::login() {
         if (clicked.size() == 1) {
             if (clicked[0].name == "Play offline") {
                 mUi->flush();
-                mUi->showElement("Play online", false);
                 mUi->showElement("Play offline", false);
                 mUi->showElement("New Game");
-                mUi->showElement("Load Game");
-            }
-            else if (clicked[0].name == "Play online") {
-                mState = State::Browse;
+                //mUi->showElement("Load Game");
             }
             else if (clicked[0].name == "New Game") {
                 mState = State::Game;
@@ -70,7 +70,7 @@ void Application::login() {
             else if (clicked[0].name == "Load Game") {
                 mUi->flush();
                 mUi->showElement("New Game", false);
-                mUi->showElement("Load Game", false);
+                //mUi->showElement("Load Game", false);
             }
         }
     }
@@ -92,9 +92,15 @@ void Application::offlineGame() {
                 for (int y = 0; y < ScreenHeight(); y++)
                     for (int x = 0; x < ScreenWidth(); x++)
                         Draw(x, y, olc::BLACK);
-
-                std::string move =  mGame->moveAction(startPos, endPos);
-                DrawString(ScreenWidth() / 3, 5, move);
+                        
+                std::string move = mGame->moveAction(startPos, endPos);
+                if (mGame->isFinished()) {
+                    std::string winner = mGame->winner();
+                    mState = State::Login;
+                    mUi = std::make_unique<LoginUi>(this);
+                    DrawString(ScreenWidth() / 2 - move.length() * 4, 20, "The winner is " + winner + "!");
+                }
+                DrawString(ScreenWidth() / 2 - move.length() * 4, 4, move);
             }
         }
     }

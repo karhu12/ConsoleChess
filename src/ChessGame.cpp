@@ -6,6 +6,7 @@ ChessGame::ChessGame() {
     mWhitePlayer = Player("White", Piece::Side::White);
     mBlackPlayer = Player("Black", Piece::Side::Black);
     mPlayerTurn = mWhitePlayer.side();
+    mWinner = "";
 }
 
 ChessGame::ChessGame(const Player& white, const Player& black) {
@@ -14,6 +15,7 @@ ChessGame::ChessGame(const Player& white, const Player& black) {
     mWhitePlayer = white;
     mBlackPlayer = black;
     mPlayerTurn = mWhitePlayer.side();
+    mWinner = "";
 }
 
 ChessGame::ChessGame(std::string moveList) {
@@ -22,6 +24,7 @@ ChessGame::ChessGame(std::string moveList) {
     mWhitePlayer = Player("White", Piece::Side::White);
     mBlackPlayer = Player("Black", Piece::Side::Black);
     mPlayerTurn = mWhitePlayer.side();
+    mWinner = "";
 
     std::istringstream ss{moveList};
     using StrIt = std::istream_iterator<std::string>;
@@ -100,6 +103,7 @@ std::string ChessGame::moveAction(const std::string& from, const std::string& to
                 if (isCheck()) {
                     if (isCheckMate()) {
                         mGameStatus = false;
+                        mWinner = Piece::sideStrings[playersTurn(false)];
                         return "Moved " + fromPos.move() + " to " + toPos.move() + ". Opponent is in check mate.";
                     }
                     return "Moved " + fromPos.move() + " to " + toPos.move() + ". Opponent is in check.";
@@ -116,6 +120,7 @@ std::string ChessGame::moveAction(const std::string& from, const std::string& to
                 if (isCheck()) {
                     if (isCheckMate()) {
                         mGameStatus = false;
+                        mWinner = Piece::sideStrings[playersTurn(false)];
                         return "Moved " + fromPos.move() + " to " + toPos.move() + ". Opponent is in check mate.";
                     }
                     return "Moved " + fromPos.move() + " to " + toPos.move() + ". Opponent is in check.";
@@ -128,7 +133,7 @@ std::string ChessGame::moveAction(const std::string& from, const std::string& to
         }
     }
     else {
-        return "Opponent's turn.";
+        return Piece::sideStrings[playersTurn()] + " players turn";
     }
 }
 

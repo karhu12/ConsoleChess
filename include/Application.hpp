@@ -8,7 +8,7 @@ class Application : public olc::PixelGameEngine {
 public:
 	Application();
 
-	enum State { Login, Browse, Game };
+	enum State { Login, Browse, Game, WhiteWin, BlackWin };
 
 public:
 	bool OnUserCreate() override;

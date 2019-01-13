@@ -24,21 +24,29 @@ public:
     std::string moveAction(const std::string& from, const std::string& to);
     const std::vector<std::pair<ChessPosition, ChessPosition>>& moveList() const { return mMoveList; }
 
-    Piece::Side playersTurn() const { return mPlayerTurn; }
+    Piece::Side playersTurn(bool current = true) const { 
+        if (current) {
+            return mPlayerTurn;
+        } 
+        else {
+            if (Piece::Side::Black == mPlayerTurn) {
+                return Piece::Side::White;
+            }
+            return Piece::Side::Black;
+        }
+    }
 
     bool isCheck();
     bool isCheckMate();
+    bool isFinished() {
+        if (mGameStatus) {
+            return false;
+        }
+        return true;
+    }
 
     std::string winner() const { 
-        if (!mGameStatus) {
-            if (mPlayerTurn == mWhitePlayer.side()) {
-                return mWhitePlayer.name();
-            }
-            else {
-                return mBlackPlayer.name();
-            }
-        }
-        return "";
+        return mWinner;
     }
 
 private:
@@ -48,6 +56,7 @@ private:
     Piece::Side mPlayerTurn;
     bool mGameStatus;
     int mTurn;
+    std::string mWinner;
 
     void rotateTurn();
 
