@@ -14,11 +14,11 @@ public:
     static constexpr int board_height = 8;
     
     ChessPiece& at(int x, int y) {
-        return mBoard[board_height * y + x];
+        return mBoard[board_width * y + x];
     }
 
     ChessPiece& at(const ChessPosition& pos) {
-        return mBoard[board_height * pos.y() + pos.x()];
+        return mBoard[board_width * pos.y() + pos.x()];
     }
 
     ChessPiece& at(int i) {
@@ -26,16 +26,16 @@ public:
     }
 
     int indexAt(ChessPosition pos) const {
-        return board_height * pos.y() + pos.x(); 
+        return board_width * pos.y() + pos.x(); 
     }
 
     int indexAt(int x, int y) const {
-        return board_height * y + x; 
+        return board_width * y + x; 
     }
 
     const std::array<ChessPiece, board_width * board_height>& board() const { return mBoard; }
 
-    bool isValidMove(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool ignoreKing = false);
+    bool isValidMove(const ChessPosition& from, const ChessPosition& to, bool ignoreKing = false);
 
     bool isValidEat(const ChessPosition& from, const ChessPosition& to);
     
@@ -45,7 +45,7 @@ public:
 
     void movePiece(const ChessPosition& from, const ChessPosition& to);
     
-    bool checkCollision(const ChessPosition& from = ChessPosition("A8"), const ChessPosition& to = ChessPosition("A8"), bool checkEnd = true, bool ignoreKing = false);
+    bool checkCollision(const ChessPosition& from, const ChessPosition& to, bool checkEnd = true, bool ignoreKing = false);
 
     std::vector<ChessPosition> piecePositions(Piece::Type type, Piece::Side side);
     std::vector<ChessPosition> piecePositions(Piece::Side side);
@@ -58,6 +58,8 @@ public:
     std::vector<ChessPosition> pieceEatPositions(const ChessPosition& piecePos);
 
     bool isMoveBlockable(const ChessPosition& from, const ChessPosition& to);
+
+    void pawnPromote(const ChessPosition& pos, Piece::Type promoteType);
 
 private:
     std::array<ChessPiece, board_width * board_height> mBoard;

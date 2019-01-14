@@ -14,54 +14,56 @@
 class ChessGame {
 public:
     ChessGame();
+    ChessGame(const Player& white, const Player& black);
     ChessGame(std::string moveList);
+
+    const ChessPiece& getPieceAt(int x, int y) { return mBoard.at(x,y); }
 
     void start();
 
-    void action(const std::string& from, const std::string& to);
-
-    bool move(const std::string& from, const std::string& to);
-    
-    bool eat(const std::string& from, const std::string& to);
-
-    void draw() {
-        std::cout << "A B C D E F G H" << std::endl;
-        std::cout << "---------------" << std::endl;
-        for (int i = 0; i < ChessBoard::board_height*ChessBoard::board_width; i++) {
-            std::cout << mBoard->at(i).typeToChar() << (i != 0 && (i + 1) % ChessBoard::board_width == 0 ? " | " + std::to_string(8 - (i / 8)) + "\n" : " ");
-        }
-        std::cout << std::endl;
-    }
-
+    std::string moveAction(const std::string& from, const std::string& to);
     const std::vector<std::pair<ChessPosition, ChessPosition>>& moveList() const { return mMoveList; }
 
-    Piece::Side playersTurn() const { return mPlayerTurn; }
+    Piece::Side playersTurn(bool current = true) const { 
+        if (current) {
+            return mPlayerTurn;
+        } 
+        else {
+            if (Piece::Side::Black == mPlayerTurn) {
+                return Piece::Side::White;
+            }
+            return Piece::Side::Black;
+        }
+    }
 
     bool isCheck();
     bool isCheckMate();
-
-    std::string winner() const { 
-        if (!mGameStatus) {
-            if (mPlayerTurn == mWhitePlayer.side()) {
-                return mWhitePlayer.name();
-            }
-            else {
-                return mBlackPlayer.name();
-            }
+    bool isFinished() {
+        if (mGameStatus) {
+            return false;
         }
-        return "";
+        return true;
     }
 
+    std::string winner() const { 
+        return mWinner;
+    }
 
 private:
-    std::unique_ptr<ChessBoard> mBoard;
+    ChessBoard mBoard;
     std::vector<std::pair<ChessPosition, ChessPosition>> mMoveList;
     Player mWhitePlayer, mBlackPlayer;
     Piece::Side mPlayerTurn;
     bool mGameStatus;
     int mTurn;
+    std::string mWinner;
 
     void rotateTurn();
 
     bool isPlayerTurn(const ChessPosition& from);
+
+    bool move(const std::string& from, const std::string& to);
+    
+    bool eat(const std::string& from, const std::string& to);
+
 };
