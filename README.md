@@ -2,16 +2,16 @@
 
 This is a project where my aim is to create a console based C++ online Chess game.
 
-Technologies
+# Technologies
 OLC Pixel Game Engine, which allows for terminal screen manipulation with better refresh rate
 C++
 
-Features
+# Features
 Offline two player Chess with mouse control
 
-To be implemented
+# To be implemented
 Game saving and loading
 Multiplayer
 
-</h1>Build</h1>
+# Build
 Run make in the directory
