@@ -13,5 +13,6 @@ Offline two player Chess with mouse control
 Game saving and loading
 Multiplayer
 
-# Build
-Run make in the directory (Requires G++ as C++ compiler, used MinGW Distribution on windows)
+# Build and Run
+Run make in the project directory (Requires G++, used MinGW-W64 Version 8.1.0 eg. https://mingw-w64.org/doku.php)
+Tested on 64bit Windows.
