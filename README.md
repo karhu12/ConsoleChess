@@ -13,5 +13,5 @@ To be implemented
 Game saving and loading
 Multiplayer
 
-#Build#
+</h1>Build</h1>
 Run make in the directory
