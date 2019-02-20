@@ -14,4 +14,4 @@ Game saving and loading
 Multiplayer
 
 # Build
-Run make in the directory
+Run make in the directory (Requires G++ as C++ compiler, used MinGW Distribution on windows)
