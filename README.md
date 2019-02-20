@@ -7,6 +7,7 @@ OLC Pixel Game Engine (UI), C++
 
 # Features
 Offline two player Chess with mouse control
+![Gameplay Example](https://i.imgur.com/KaMWoI8.gifv)
 
 # To be implemented
 Game saving and loading
