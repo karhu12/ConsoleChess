@@ -12,3 +12,6 @@ Offline two player Chess with mouse control
 To be implemented
 Game saving and loading
 Multiplayer
+
+#Build#
+Run make in the directory
